@@ -5,6 +5,7 @@ import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { Label } from "@/components/ui/label";
 import { MapPin, Phone, Mail, Clock, Send, Facebook, Twitter, Instagram, Linkedin, Youtube } from "lucide-react";
+import Map from "@/components/Map";
 
 const Contact = () => {
   return (
@@ -235,17 +236,8 @@ const Contact = () => {
             </p>
           </div>
           
-          <div className="bg-muted rounded-xl overflow-hidden" style={{ height: '400px' }}>
-            {/* Google Maps Embed would go here */}
-            <div className="w-full h-full flex items-center justify-center bg-gradient-to-br from-primary/20 to-accent/20">
-              <div className="text-center">
-                <MapPin className="h-16 w-16 text-primary mx-auto mb-4" />
-                <h3 className="text-2xl font-bold mb-2">Google Maps Integration</h3>
-                <p className="text-muted-foreground">
-                  Interactive map showing our location in Douala, Cameroon
-                </p>
-              </div>
-            </div>
+          <div className="bg-muted rounded-xl overflow-hidden">
+            <Map />
           </div>
         </div>
       </section>

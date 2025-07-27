@@ -1,11 +1,73 @@
+import { useState } from "react";
 import Layout from "@/components/Layout";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { Lock, User, Shield } from "lucide-react";
+import { Lock, User, Shield, AlertCircle, Eye, EyeOff } from "lucide-react";
+import { useToast } from "@/hooks/use-toast";
+import { validateAdminCredentials, sanitizeInput, RateLimiter } from "@/lib/security";
 
 const Admin = () => {
+  const { toast } = useToast();
+  const [formData, setFormData] = useState({ username: '', password: '' });
+  const [formErrors, setFormErrors] = useState<Record<string, string>>({});
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [showPassword, setShowPassword] = useState(false);
+  const [loginAttempts, setLoginAttempts] = useState(0);
+  const rateLimiter = new RateLimiter();
+
+  const handleInputChange = (field: string, value: string) => {
+    const sanitizedValue = sanitizeInput(value);
+    setFormData(prev => ({ ...prev, [field]: sanitizedValue }));
+    
+    if (formErrors[field]) {
+      setFormErrors(prev => ({ ...prev, [field]: '' }));
+    }
+  };
+
+  const handleSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
+    
+    // Rate limiting check
+    if (!rateLimiter.canAttempt('admin-login', 3, 900000)) { // 15 minutes
+      toast({
+        title: "Too many login attempts",
+        description: "Please wait 15 minutes before trying again.",
+        variant: "destructive",
+      });
+      return;
+    }
+
+    const validation = validateAdminCredentials(formData.username, formData.password);
+    
+    if (!validation.isValid) {
+      const errors: Record<string, string> = {};
+      validation.errors.forEach(error => {
+        if (error.includes('Username')) {
+          errors.username = error;
+        } else if (error.includes('Password')) {
+          errors.password = error;
+        }
+      });
+      setFormErrors(errors);
+      return;
+    }
+
+    setIsSubmitting(true);
+    setLoginAttempts(prev => prev + 1);
+    
+    // Simulate authentication check
+    setTimeout(() => {
+      toast({
+        title: "Authentication Required",
+        description: "Please connect to Supabase to enable admin authentication.",
+        variant: "destructive",
+      });
+      setIsSubmitting(false);
+    }, 1000);
+  };
+
   return (
     <Layout>
       {/* Hero Section */}
@@ -34,7 +96,7 @@ const Admin = () => {
               </p>
             </CardHeader>
             <CardContent>
-              <form className="space-y-6">
+              <form onSubmit={handleSubmit} className="space-y-6">
                 <div>
                   <Label htmlFor="username" className="flex items-center space-x-2">
                     <User className="h-4 w-4" />
@@ -44,8 +106,19 @@ const Admin = () => {
                     id="username" 
                     type="text" 
                     placeholder="Enter your username"
-                    className="mt-1"
+                    className={`mt-1 ${formErrors.username ? 'border-destructive' : ''}`}
+                    value={formData.username}
+                    onChange={(e) => handleInputChange('username', e.target.value)}
+                    maxLength={50}
+                    required
+                    autoComplete="username"
                   />
+                  {formErrors.username && (
+                    <p className="text-sm text-destructive mt-1 flex items-center">
+                      <AlertCircle className="h-4 w-4 mr-1" />
+                      {formErrors.username}
+                    </p>
+                  )}
                 </div>
                 
                 <div>
@@ -53,12 +126,38 @@ const Admin = () => {
                     <Lock className="h-4 w-4" />
                     <span>Password</span>
                   </Label>
-                  <Input 
-                    id="password" 
-                    type="password" 
-                    placeholder="Enter your password"
-                    className="mt-1"
-                  />
+                  <div className="relative">
+                    <Input 
+                      id="password" 
+                      type={showPassword ? "text" : "password"}
+                      placeholder="Enter your password"
+                      className={`mt-1 pr-10 ${formErrors.password ? 'border-destructive' : ''}`}
+                      value={formData.password}
+                      onChange={(e) => handleInputChange('password', e.target.value)}
+                      maxLength={128}
+                      required
+                      autoComplete="current-password"
+                    />
+                    <Button
+                      type="button"
+                      variant="ghost"
+                      size="icon"
+                      className="absolute right-1 top-1/2 -translate-y-1/2 h-8 w-8"
+                      onClick={() => setShowPassword(!showPassword)}
+                    >
+                      {showPassword ? (
+                        <EyeOff className="h-4 w-4" />
+                      ) : (
+                        <Eye className="h-4 w-4" />
+                      )}
+                    </Button>
+                  </div>
+                  {formErrors.password && (
+                    <p className="text-sm text-destructive mt-1 flex items-center">
+                      <AlertCircle className="h-4 w-4 mr-1" />
+                      {formErrors.password}
+                    </p>
+                  )}
                 </div>
                 
                 <div className="flex items-center justify-between">
@@ -71,8 +170,18 @@ const Admin = () => {
                   </a>
                 </div>
                 
-                <Button type="submit" className="w-full megah-btn-primary py-3">
-                  Sign In
+                {loginAttempts > 0 && (
+                  <div className="text-sm text-muted-foreground text-center">
+                    Login attempts: {loginAttempts}/3
+                  </div>
+                )}
+                
+                <Button 
+                  type="submit" 
+                  className="w-full megah-btn-primary py-3"
+                  disabled={isSubmitting}
+                >
+                  {isSubmitting ? 'Signing In...' : 'Sign In'}
                 </Button>
               </form>
             </CardContent>

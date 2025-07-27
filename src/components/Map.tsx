@@ -4,12 +4,15 @@ import 'mapbox-gl/dist/mapbox-gl.css';
 import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent } from '@/components/ui/card';
+import { AlertCircle } from 'lucide-react';
+import { validateMapboxToken } from '@/lib/security';
 
 const Map = () => {
   const mapContainer = useRef<HTMLDivElement>(null);
   const map = useRef<mapboxgl.Map | null>(null);
   const [token, setToken] = useState('');
   const [mapInitialized, setMapInitialized] = useState(false);
+  const [tokenError, setTokenError] = useState('');
 
   const initializeMap = (accessToken: string) => {
     if (!mapContainer.current || mapInitialized) return;
@@ -40,8 +43,22 @@ const Map = () => {
   };
 
   const handleTokenSubmit = () => {
-    if (token.trim()) {
-      initializeMap(token.trim());
+    const trimmedToken = token.trim();
+    const validation = validateMapboxToken(trimmedToken);
+    
+    if (!validation.isValid) {
+      setTokenError(validation.errors[0]);
+      return;
+    }
+    
+    setTokenError('');
+    initializeMap(trimmedToken);
+  };
+
+  const handleTokenChange = (value: string) => {
+    setToken(value);
+    if (tokenError) {
+      setTokenError('');
     }
   };
 
@@ -60,15 +77,26 @@ const Map = () => {
             <p className="text-muted-foreground text-sm">
               Get your free token at <a href="https://mapbox.com/" target="_blank" rel="noopener noreferrer" className="text-primary underline">mapbox.com</a>
             </p>
-            <div className="flex gap-2 max-w-md">
-              <Input
-                type="text"
-                placeholder="pk.eyJ1..."
-                value={token}
-                onChange={(e) => setToken(e.target.value)}
-                className="flex-1"
-              />
-              <Button onClick={handleTokenSubmit}>Load Map</Button>
+            <div className="space-y-2 max-w-md">
+              <div className="flex gap-2">
+                <Input
+                  type="text"
+                  placeholder="pk.eyJ1..."
+                  value={token}
+                  onChange={(e) => handleTokenChange(e.target.value)}
+                  className={`flex-1 ${tokenError ? 'border-destructive' : ''}`}
+                  maxLength={200}
+                />
+                <Button onClick={handleTokenSubmit} disabled={!token.trim()}>
+                  Load Map
+                </Button>
+              </div>
+              {tokenError && (
+                <p className="text-sm text-destructive flex items-center">
+                  <AlertCircle className="h-4 w-4 mr-1" />
+                  {tokenError}
+                </p>
+              )}
             </div>
           </CardContent>
         </Card>

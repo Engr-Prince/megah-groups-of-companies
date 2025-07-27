@@ -1,11 +1,13 @@
 import { useState } from "react";
 import { Link, useLocation } from "react-router-dom";
 import { Button } from "@/components/ui/button";
-import { Moon, Sun, Menu, X, Globe } from "lucide-react";
+import { Moon, Sun, Menu, X, Globe, ChevronDown } from "lucide-react";
 import { useTheme } from "./ThemeProvider";
 
 const Navbar = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const [isLangOpen, setIsLangOpen] = useState(false);
+  const [language, setLanguage] = useState("EN");
   const { theme, setTheme } = useTheme();
   const location = useLocation();
 
@@ -20,9 +22,11 @@ const Navbar = () => {
 
   const isActive = (path: string) => location.pathname === path;
 
-  const toggleLanguage = () => {
+  const switchLanguage = (lang: string) => {
+    setLanguage(lang);
+    setIsLangOpen(false);
     // Google Translate integration would go here
-    console.log("Language toggle clicked");
+    console.log(`Language switched to: ${lang}`);
   };
 
   return (
@@ -56,14 +60,34 @@ const Navbar = () => {
 
           {/* Desktop Actions */}
           <div className="hidden md:flex items-center space-x-4">
-            <Button
-              variant="ghost"
-              size="icon"
-              onClick={toggleLanguage}
-              className="hover:bg-white/10"
-            >
-              <Globe className="h-5 w-5" />
-            </Button>
+            <div className="relative">
+              <Button
+                variant="ghost"
+                size="sm"
+                onClick={() => setIsLangOpen(!isLangOpen)}
+                className="hover:bg-white/10 flex items-center space-x-1"
+              >
+                <Globe className="h-4 w-4" />
+                <span className="text-sm">{language}</span>
+                <ChevronDown className="h-3 w-3" />
+              </Button>
+              {isLangOpen && (
+                <div className="absolute top-full right-0 mt-1 bg-background border border-border rounded-md shadow-lg overflow-hidden z-50 min-w-[80px]">
+                  <button
+                    onClick={() => switchLanguage("EN")}
+                    className="w-full px-3 py-2 text-sm text-left hover:bg-accent hover:text-accent-foreground transition-colors"
+                  >
+                    EN
+                  </button>
+                  <button
+                    onClick={() => switchLanguage("FR")}
+                    className="w-full px-3 py-2 text-sm text-left hover:bg-accent hover:text-accent-foreground transition-colors"
+                  >
+                    FR
+                  </button>
+                </div>
+              )}
+            </div>
             <Button
               variant="ghost"
               size="icon"
@@ -107,14 +131,34 @@ const Navbar = () => {
               </Link>
             ))}
             <div className="flex items-center space-x-4 pt-4 border-t border-white/10">
-              <Button
-                variant="ghost"
-                size="icon"
-                onClick={toggleLanguage}
-                className="hover:bg-white/10"
-              >
-                <Globe className="h-5 w-5" />
-              </Button>
+              <div className="relative">
+                <Button
+                  variant="ghost"
+                  size="sm"
+                  onClick={() => setIsLangOpen(!isLangOpen)}
+                  className="hover:bg-white/10 flex items-center space-x-1"
+                >
+                  <Globe className="h-4 w-4" />
+                  <span className="text-sm">{language}</span>
+                  <ChevronDown className="h-3 w-3" />
+                </Button>
+                {isLangOpen && (
+                  <div className="absolute bottom-full right-0 mb-1 bg-background border border-border rounded-md shadow-lg overflow-hidden z-50 min-w-[80px]">
+                    <button
+                      onClick={() => switchLanguage("EN")}
+                      className="w-full px-3 py-2 text-sm text-left hover:bg-accent hover:text-accent-foreground transition-colors"
+                    >
+                      EN
+                    </button>
+                    <button
+                      onClick={() => switchLanguage("FR")}
+                      className="w-full px-3 py-2 text-sm text-left hover:bg-accent hover:text-accent-foreground transition-colors"
+                    >
+                      FR
+                    </button>
+                  </div>
+                )}
+              </div>
               <Button
                 variant="ghost"
                 size="icon"

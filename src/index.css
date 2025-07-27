@@ -1,42 +1,56 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Poppins:wght@300;400;500;600;700;800&display=swap');
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
 
-/* Definition of the design system. All colors, gradients, fonts, etc should be defined here. 
-All colors MUST be HSL.
-*/
+/* MEGAH Design System - African Tech Innovation */
 
 @layer base {
   :root {
+    /* MEGAH Brand Colors - Cameroon inspired palette */
     --background: 0 0% 100%;
-    --foreground: 222.2 84% 4.9%;
+    --foreground: 220 13% 15%;
+
+    /* MEGAH Brand Colors */
+    --megah-green: 142 68% 45%;      /* Cameroon green */
+    --megah-red: 0 75% 55%;          /* Cameroon red */
+    --megah-yellow: 45 93% 58%;      /* Cameroon yellow */
+    --megah-blue: 220 85% 55%;       /* Tech blue */
+    --megah-purple: 270 70% 60%;     /* Innovation purple */
+    
+    /* Gradients */
+    --gradient-primary: linear-gradient(135deg, hsl(var(--megah-green)), hsl(var(--megah-blue)));
+    --gradient-secondary: linear-gradient(135deg, hsl(var(--megah-purple)), hsl(var(--megah-blue)));
+    --gradient-accent: linear-gradient(135deg, hsl(var(--megah-yellow)), hsl(var(--megah-red)));
+    --gradient-hero: linear-gradient(135deg, hsl(var(--megah-green) / 0.1), hsl(var(--megah-blue) / 0.1));
 
     --card: 0 0% 100%;
-    --card-foreground: 222.2 84% 4.9%;
+    --card-foreground: 220 13% 15%;
 
     --popover: 0 0% 100%;
-    --popover-foreground: 222.2 84% 4.9%;
+    --popover-foreground: 220 13% 15%;
 
-    --primary: 222.2 47.4% 11.2%;
-    --primary-foreground: 210 40% 98%;
+    --primary: 142 68% 45%;
+    --primary-foreground: 0 0% 100%;
 
-    --secondary: 210 40% 96.1%;
-    --secondary-foreground: 222.2 47.4% 11.2%;
+    --secondary: 220 15% 96%;
+    --secondary-foreground: 220 13% 15%;
 
-    --muted: 210 40% 96.1%;
-    --muted-foreground: 215.4 16.3% 46.9%;
+    --muted: 220 15% 96%;
+    --muted-foreground: 220 9% 46%;
 
-    --accent: 210 40% 96.1%;
-    --accent-foreground: 222.2 47.4% 11.2%;
+    --accent: 45 93% 58%;
+    --accent-foreground: 220 13% 15%;
 
-    --destructive: 0 84.2% 60.2%;
-    --destructive-foreground: 210 40% 98%;
+    --destructive: 0 75% 55%;
+    --destructive-foreground: 0 0% 100%;
 
-    --border: 214.3 31.8% 91.4%;
-    --input: 214.3 31.8% 91.4%;
-    --ring: 222.2 84% 4.9%;
+    --border: 220 13% 91%;
+    --input: 220 13% 91%;
+    --ring: 142 68% 45%;
 
-    --radius: 0.5rem;
+    --radius: 0.75rem;
 
     --sidebar-background: 0 0% 98%;
 
@@ -56,33 +70,36 @@ All colors MUST be HSL.
   }
 
   .dark {
-    --background: 222.2 84% 4.9%;
-    --foreground: 210 40% 98%;
+    --background: 220 27% 8%;
+    --foreground: 220 9% 90%;
 
-    --card: 222.2 84% 4.9%;
-    --card-foreground: 210 40% 98%;
+    /* Dark mode gradients */
+    --gradient-hero: linear-gradient(135deg, hsl(var(--megah-green) / 0.2), hsl(var(--megah-blue) / 0.2));
 
-    --popover: 222.2 84% 4.9%;
-    --popover-foreground: 210 40% 98%;
+    --card: 220 20% 12%;
+    --card-foreground: 220 9% 90%;
 
-    --primary: 210 40% 98%;
-    --primary-foreground: 222.2 47.4% 11.2%;
+    --popover: 220 20% 12%;
+    --popover-foreground: 220 9% 90%;
 
-    --secondary: 217.2 32.6% 17.5%;
-    --secondary-foreground: 210 40% 98%;
+    --primary: 142 68% 55%;
+    --primary-foreground: 220 27% 8%;
 
-    --muted: 217.2 32.6% 17.5%;
-    --muted-foreground: 215 20.2% 65.1%;
+    --secondary: 220 15% 15%;
+    --secondary-foreground: 220 9% 90%;
 
-    --accent: 217.2 32.6% 17.5%;
-    --accent-foreground: 210 40% 98%;
+    --muted: 220 15% 15%;
+    --muted-foreground: 220 9% 60%;
 
-    --destructive: 0 62.8% 30.6%;
-    --destructive-foreground: 210 40% 98%;
+    --accent: 45 93% 68%;
+    --accent-foreground: 220 27% 8%;
 
-    --border: 217.2 32.6% 17.5%;
-    --input: 217.2 32.6% 17.5%;
-    --ring: 212.7 26.8% 83.9%;
+    --destructive: 0 75% 65%;
+    --destructive-foreground: 220 27% 8%;
+
+    --border: 220 15% 20%;
+    --input: 220 15% 20%;
+    --ring: 142 68% 55%;
     --sidebar-background: 240 5.9% 10%;
     --sidebar-foreground: 240 4.8% 95.9%;
     --sidebar-primary: 224.3 76.3% 48%;
@@ -100,6 +117,75 @@ All colors MUST be HSL.
   }
 
   body {
-    @apply bg-background text-foreground;
+    @apply bg-background text-foreground font-inter;
   }
+}
+
+/* MEGAH Custom Components */
+@layer components {
+  .megah-gradient-text {
+    @apply bg-gradient-to-r from-primary via-accent to-primary bg-clip-text text-transparent;
+  }
+  
+  .megah-hero-bg {
+    background: var(--gradient-hero);
+  }
+  
+  .megah-glass {
+    @apply backdrop-blur-md bg-white/10 border border-white/20;
+  }
+  
+  .megah-card-hover {
+    @apply transition-all duration-300 hover:scale-105 hover:shadow-xl hover:shadow-primary/20;
+  }
+  
+  .megah-btn-primary {
+    @apply bg-gradient-to-r from-primary to-accent text-primary-foreground font-semibold;
+    @apply hover:shadow-lg hover:shadow-primary/25 transition-all duration-300;
+  }
+  
+  .megah-btn-glass {
+    @apply bg-white/10 backdrop-blur-md border border-white/20 text-foreground;
+    @apply hover:bg-white/20 transition-all duration-300;
+  }
+}
+
+/* MEGAH Animations */
+@layer utilities {
+  .animate-float {
+    animation: float 6s ease-in-out infinite;
+  }
+  
+  .animate-pulse-slow {
+    animation: pulse 4s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+  }
+  
+  .animate-slide-up {
+    animation: slideUp 0.8s ease-out;
+  }
+  
+  .animate-fade-in {
+    animation: fadeIn 1s ease-out;
+  }
+}
+
+@keyframes float {
+  0%, 100% { transform: translateY(0px); }
+  50% { transform: translateY(-20px); }
+}
+
+@keyframes slideUp {
+  from {
+    opacity: 0;
+    transform: translateY(30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
 }

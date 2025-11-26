@@ -4,9 +4,9 @@ import { Button } from "@/components/ui/button";
 import { Github, Linkedin, Mail } from "lucide-react";
 import { useLanguage } from "@/contexts/LanguageContext";
 import megahCeoPic from "@/assets/megah-ceo.jpg";
+import queenPic from "@/assets/team-queen.jpg";
 import janePic from "@/assets/team-jane.jpg";
 import johnPic from "@/assets/team-john.jpg";
-import lindaPic from "@/assets/team-linda.jpg";
 
 const Team = () => {
   const { t } = useLanguage();
@@ -32,6 +32,18 @@ const Team = () => {
       isCeo: true
     },
     {
+      name: "Miss Ndi Queen Onella",
+      role: "Marketing Lead",
+      image: queenPic,
+      bio: "Strategic marketing professional driving growth and brand awareness. Specialist in digital marketing and community building.",
+      specialties: ["Digital Marketing", "Brand Strategy", "Content Creation", "Community Building"],
+      social: {
+        github: "#",
+        linkedin: "#",
+        email: "queen@megahgroup.com"
+      }
+    },
+    {
       name: "Jane Doe",
       role: "Project Manager",
       image: janePic,
@@ -53,18 +65,6 @@ const Team = () => {
         github: "#",
         linkedin: "#",
         email: "john@megahgroup.com"
-      }
-    },
-    {
-      name: "Linda Kay",
-      role: "Marketing Lead",
-      image: lindaPic,
-      bio: "Strategic marketing professional driving growth and brand awareness. Specialist in digital marketing and community building.",
-      specialties: ["Digital Marketing", "Brand Strategy", "Content Creation", "Community Building"],
-      social: {
-        github: "#",
-        linkedin: "#",
-        email: "linda@megahgroup.com"
       }
     }
   ];

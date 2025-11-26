@@ -51,12 +51,17 @@ export const validatePhone = (phone: string): ValidationResult => {
 // Name validation
 export const validateName = (name: string, fieldName: string): ValidationResult => {
   const errors: string[] = [];
-  const nameRegex = /^[a-zA-ZÀ-ÿ\s\-\'\.]{2,50}$/;
+  // More permissive regex that allows numbers and most special characters
+  const nameRegex = /^[a-zA-ZÀ-ÿ0-9\s\-\'\.\,]{2,50}$/;
   
   if (!name) {
     errors.push(`${fieldName} is required`);
+  } else if (name.length < 2) {
+    errors.push(`${fieldName} must be at least 2 characters`);
+  } else if (name.length > 50) {
+    errors.push(`${fieldName} must be less than 50 characters`);
   } else if (!nameRegex.test(name)) {
-    errors.push(`${fieldName} must contain only letters, spaces, hyphens, and apostrophes (2-50 characters)`);
+    errors.push(`${fieldName} contains invalid characters`);
   }
   
   return {

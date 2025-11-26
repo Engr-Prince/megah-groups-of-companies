@@ -93,9 +93,17 @@ const Contact = () => {
     }
 
     if (!validateForm()) {
+      // Scroll to first error
+      const firstErrorField = Object.keys(formErrors)[0];
+      const element = document.getElementById(firstErrorField);
+      if (element) {
+        element.scrollIntoView({ behavior: 'smooth', block: 'center' });
+        element.focus();
+      }
+      
       toast({
-        title: "Validation Error",
-        description: "Please correct the errors in the form.",
+        title: "Please check the form",
+        description: "Some fields need your attention. Check the highlighted fields below.",
         variant: "destructive",
       });
       return;
@@ -123,6 +131,7 @@ const Contact = () => {
         message: '',
         timeline: ''
       });
+      setFormErrors({});
     }, 1000);
   };
 

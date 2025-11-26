@@ -3,30 +3,29 @@ import { Link, useLocation } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { Moon, Sun, Menu, X, Globe, ChevronDown } from "lucide-react";
 import { useTheme } from "./ThemeProvider";
+import { useLanguage } from "@/contexts/LanguageContext";
 
 const Navbar = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [isLangOpen, setIsLangOpen] = useState(false);
-  const [language, setLanguage] = useState("EN");
+  const { language, setLanguage, t } = useLanguage();
   const { theme, setTheme } = useTheme();
   const location = useLocation();
 
   const navItems = [
-    { name: "Home", path: "/" },
-    { name: "About", path: "/about" },
-    { name: "Services", path: "/services" },
-    { name: "Team", path: "/team" },
-    { name: "Support", path: "/support" },
-    { name: "Contact", path: "/contact" },
+    { name: t('nav.home'), path: "/" },
+    { name: t('nav.about'), path: "/about" },
+    { name: t('nav.services'), path: "/services" },
+    { name: t('nav.team'), path: "/team" },
+    { name: t('nav.support'), path: "/support" },
+    { name: t('nav.contact'), path: "/contact" },
   ];
 
   const isActive = (path: string) => location.pathname === path;
 
-  const switchLanguage = (lang: string) => {
+  const switchLanguage = (lang: 'EN' | 'FR') => {
     setLanguage(lang);
     setIsLangOpen(false);
-    // Google Translate integration would go here
-    console.log(`Language switched to: ${lang}`);
   };
 
   return (

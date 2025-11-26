@@ -4,8 +4,11 @@ import { ArrowRight, Code, Users, Globe, Zap, Play } from "lucide-react";
 import { Link } from "react-router-dom";
 import Layout from "@/components/Layout";
 import heroBg from "@/assets/hero-bg.jpg";
+import { useLanguage } from "@/contexts/LanguageContext";
 
 const Index = () => {
+  const { t } = useLanguage();
+  
   return (
     <Layout>
       {/* Hero Section */}
@@ -23,25 +26,24 @@ const Index = () => {
         <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
           <div className="animate-slide-up">
             <h1 className="text-5xl md:text-7xl font-bold text-white mb-6 font-poppins">
-              Think Big.{" "}
+              {t('hero.title')}{" "}
               <span className="megah-gradient-text bg-gradient-to-r from-megah-yellow to-megah-green bg-clip-text text-transparent">
-                Grow MEGAH
+                {t('hero.subtitle')}
               </span>
             </h1>
             <p className="text-xl md:text-2xl text-white/90 mb-8 max-w-3xl mx-auto leading-relaxed">
-              Empowering African innovation through cutting-edge technology solutions. 
-              From web development to startup consulting, we're building the digital future of Cameroon.
+              {t('hero.description')}
             </p>
             
             <div className="flex flex-col sm:flex-row gap-4 justify-center items-center">
               <Button asChild className="megah-btn-primary px-8 py-3 text-lg">
                 <Link to="/services">
-                  Explore Services <ArrowRight className="ml-2 h-5 w-5" />
+                  {t('hero.exploreServices')} <ArrowRight className="ml-2 h-5 w-5" />
                 </Link>
               </Button>
               <Button asChild variant="outline" className="megah-btn-glass px-8 py-3 text-lg text-white border-white/30">
                 <Link to="/contact">
-                  Contact Us
+                  {t('hero.contactUs')}
                 </Link>
               </Button>
             </div>
@@ -77,10 +79,9 @@ const Index = () => {
       <section className="py-20 bg-background">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-16">
-            <h2 className="text-4xl font-bold mb-6 megah-gradient-text">Our Mission</h2>
+            <h2 className="text-4xl font-bold mb-6 megah-gradient-text">{t('mission.title')}</h2>
             <p className="text-xl text-muted-foreground max-w-3xl mx-auto">
-              To revolutionize the African tech landscape by providing world-class technology solutions, 
-              fostering innovation, and empowering the next generation of African tech leaders.
+              {t('mission.description')}
             </p>
           </div>
           
@@ -90,9 +91,9 @@ const Index = () => {
                 <div className="w-16 h-16 bg-gradient-primary rounded-full flex items-center justify-center mx-auto mb-4">
                   <Code className="h-8 w-8 text-white" />
                 </div>
-                <h3 className="text-2xl font-semibold mb-4">Innovation</h3>
+                <h3 className="text-2xl font-semibold mb-4">{t('mission.innovation')}</h3>
                 <p className="text-muted-foreground">
-                  Cutting-edge solutions that push the boundaries of what's possible in African tech.
+                  {t('mission.innovationDesc')}
                 </p>
               </CardContent>
             </Card>
@@ -102,9 +103,9 @@ const Index = () => {
                 <div className="w-16 h-16 bg-gradient-accent rounded-full flex items-center justify-center mx-auto mb-4">
                   <Users className="h-8 w-8 text-white" />
                 </div>
-                <h3 className="text-2xl font-semibold mb-4">Community</h3>
+                <h3 className="text-2xl font-semibold mb-4">{t('mission.community')}</h3>
                 <p className="text-muted-foreground">
-                  Building a strong network of tech professionals and entrepreneurs across Africa.
+                  {t('mission.communityDesc')}
                 </p>
               </CardContent>
             </Card>
@@ -114,9 +115,9 @@ const Index = () => {
                 <div className="w-16 h-16 bg-gradient-secondary rounded-full flex items-center justify-center mx-auto mb-4">
                   <Globe className="h-8 w-8 text-white" />
                 </div>
-                <h3 className="text-2xl font-semibold mb-4">Global Impact</h3>
+                <h3 className="text-2xl font-semibold mb-4">{t('mission.globalImpact')}</h3>
                 <p className="text-muted-foreground">
-                  Connecting African innovation with global markets and opportunities.
+                  {t('mission.globalImpactDesc')}
                 </p>
               </CardContent>
             </Card>
@@ -128,43 +129,42 @@ const Index = () => {
       <section className="py-20 megah-hero-bg">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-16">
-            <h2 className="text-4xl font-bold mb-6 text-white">What We Do</h2>
+            <h2 className="text-4xl font-bold mb-6 text-white">{t('services.title')}</h2>
             <p className="text-xl text-white/80 max-w-3xl mx-auto">
-              From concept to deployment, we provide comprehensive technology solutions 
-              that drive growth and innovation.
+              {t('services.description')}
             </p>
           </div>
           
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
             <div className="megah-glass rounded-xl p-6 text-center megah-card-hover">
               <Code className="h-12 w-12 text-megah-green mx-auto mb-4" />
-              <h3 className="text-lg font-semibold text-white mb-2">Web & App Development</h3>
-              <p className="text-white/70 text-sm">Modern, scalable applications built with cutting-edge technology.</p>
+              <h3 className="text-lg font-semibold text-white mb-2">{t('services.webDev')}</h3>
+              <p className="text-white/70 text-sm">{t('services.webDevDesc')}</p>
             </div>
             
             <div className="megah-glass rounded-xl p-6 text-center megah-card-hover">
               <Users className="h-12 w-12 text-megah-yellow mx-auto mb-4" />
-              <h3 className="text-lg font-semibold text-white mb-2">Startup Consulting</h3>
-              <p className="text-white/70 text-sm">Strategic guidance to transform your ideas into successful businesses.</p>
+              <h3 className="text-lg font-semibold text-white mb-2">{t('services.consulting')}</h3>
+              <p className="text-white/70 text-sm">{t('services.consultingDesc')}</p>
             </div>
             
             <div className="megah-glass rounded-xl p-6 text-center megah-card-hover">
               <Globe className="h-12 w-12 text-megah-blue mx-auto mb-4" />
-              <h3 className="text-lg font-semibold text-white mb-2">Document Processing</h3>
-              <p className="text-white/70 text-sm">Efficient document services for travel and business needs.</p>
+              <h3 className="text-lg font-semibold text-white mb-2">{t('services.documents')}</h3>
+              <p className="text-white/70 text-sm">{t('services.documentsDesc')}</p>
             </div>
             
             <div className="megah-glass rounded-xl p-6 text-center megah-card-hover">
               <Zap className="h-12 w-12 text-megah-red mx-auto mb-4" />
-              <h3 className="text-lg font-semibold text-white mb-2">MegaConnect Platform</h3>
-              <p className="text-white/70 text-sm">Connecting talent with opportunities across Africa.</p>
+              <h3 className="text-lg font-semibold text-white mb-2">{t('services.platform')}</h3>
+              <p className="text-white/70 text-sm">{t('services.platformDesc')}</p>
             </div>
           </div>
           
           <div className="text-center mt-12">
             <Button asChild className="megah-btn-primary px-8 py-3 text-lg">
               <Link to="/services">
-                View All Services <ArrowRight className="ml-2 h-5 w-5" />
+                {t('services.viewAll')} <ArrowRight className="ml-2 h-5 w-5" />
               </Link>
             </Button>
           </div>
@@ -174,13 +174,13 @@ const Index = () => {
       {/* CTA Section */}
       <section className="py-20 bg-background">
         <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
-          <h2 className="text-4xl font-bold mb-6 megah-gradient-text">Ready to Grow MEGAH?</h2>
+          <h2 className="text-4xl font-bold mb-6 megah-gradient-text">{t('cta.title')}</h2>
           <p className="text-xl text-muted-foreground mb-8">
-            Join us in building the future of African technology. Let's create something extraordinary together.
+            {t('cta.description')}
           </p>
           <Button asChild className="megah-btn-primary px-12 py-4 text-lg">
             <Link to="/contact">
-              Get Started Today <ArrowRight className="ml-2 h-6 w-6" />
+              {t('cta.getStarted')} <ArrowRight className="ml-2 h-6 w-6" />
             </Link>
           </Button>
         </div>

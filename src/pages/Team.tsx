@@ -2,24 +2,34 @@ import Layout from "@/components/Layout";
 import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Github, Linkedin, Mail } from "lucide-react";
-import princePic from "@/assets/team-prince.jpg";
+import { useLanguage } from "@/contexts/LanguageContext";
+import megahCeoPic from "@/assets/megah-ceo.jpg";
 import janePic from "@/assets/team-jane.jpg";
 import johnPic from "@/assets/team-john.jpg";
 import lindaPic from "@/assets/team-linda.jpg";
 
 const Team = () => {
+  const { t } = useLanguage();
+  
   const teamMembers = [
     {
-      name: "Tabinyor Prince Emmanuel",
-      role: "Co-Founder & Lead Developer",
-      image: princePic,
-      bio: "Visionary leader with expertise in full-stack development and innovative solutions. Passionate about empowering African tech talent.",
-      specialties: ["React", "Node.js", "Cloud Architecture", "Startup Strategy"],
+      name: "Megah T.E.Prince",
+      role: t('team.founderRole'),
+      image: megahCeoPic,
+      bio: t('team.ceoBio'),
+      specialties: [
+        t('team.fullStackDev'),
+        t('team.digitalInnovation'),
+        t('team.pastorMinistry'),
+        t('team.writingContent'),
+        t('team.graphicsDesign')
+      ],
       social: {
         github: "#",
         linkedin: "#",
-        email: "prince@megahgroup.com"
-      }
+        email: "megahprince82@gmail.com"
+      },
+      isCeo: true
     },
     {
       name: "Jane Doe",
@@ -65,10 +75,10 @@ const Team = () => {
       <section className="py-20 megah-hero-bg">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
           <h1 className="text-5xl md:text-6xl font-bold text-white mb-6 animate-slide-up">
-            Our <span className="megah-gradient-text bg-gradient-to-r from-megah-yellow to-megah-green bg-clip-text text-transparent">Team</span>
+            {t('team.heroTitle')} <span className="megah-gradient-text bg-gradient-to-r from-megah-yellow to-megah-green bg-clip-text text-transparent">{t('team.heroHighlight')}</span>
           </h1>
           <p className="text-xl text-white/80 max-w-3xl mx-auto">
-            Meet the passionate innovators driving Africa's tech revolution
+            {t('team.heroSubtitle')}
           </p>
         </div>
       </section>
@@ -76,8 +86,65 @@ const Team = () => {
       {/* Team Members */}
       <section className="py-20 bg-background">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-            {teamMembers.map((member, index) => (
+          {/* CEO Featured Card */}
+          {teamMembers.filter(m => m.isCeo).map((member, index) => (
+            <Card key={index} className="megah-card-hover border-2 border-primary/30 overflow-hidden mb-12 shadow-lg">
+              <CardContent className="p-0">
+                <div className="grid md:grid-cols-2 gap-0">
+                  <div className="relative h-96 md:h-auto">
+                    <img 
+                      src={member.image} 
+                      alt={member.name}
+                      className="w-full h-full object-cover"
+                    />
+                    <div className="absolute inset-0 bg-gradient-to-t md:bg-gradient-to-r from-black/60 to-transparent"></div>
+                    <div className="absolute bottom-6 left-6 text-white">
+                      <div className="inline-block px-3 py-1 bg-primary/90 rounded-full text-sm font-semibold mb-2">
+                        {member.role}
+                      </div>
+                      <h3 className="text-3xl md:text-4xl font-bold">{member.name}</h3>
+                    </div>
+                  </div>
+                  
+                  <div className="p-8 md:p-10 flex flex-col justify-center">
+                    <p className="text-muted-foreground mb-6 leading-relaxed text-base">
+                      {member.bio}
+                    </p>
+                    
+                    <div className="mb-6">
+                      <h4 className="font-semibold mb-3 text-lg">{t('team.specialties')}</h4>
+                      <div className="flex flex-wrap gap-2">
+                        {member.specialties.map((specialty, idx) => (
+                          <span 
+                            key={idx}
+                            className="px-4 py-2 bg-gradient-to-r from-primary/20 to-accent/20 text-foreground rounded-full text-sm font-medium"
+                          >
+                            {specialty}
+                          </span>
+                        ))}
+                      </div>
+                    </div>
+                    
+                    <div className="flex space-x-3">
+                      <Button variant="outline" size="icon" className="hover:bg-primary hover:text-primary-foreground">
+                        <Github className="h-5 w-5" />
+                      </Button>
+                      <Button variant="outline" size="icon" className="hover:bg-primary hover:text-primary-foreground">
+                        <Linkedin className="h-5 w-5" />
+                      </Button>
+                      <Button variant="outline" size="icon" className="hover:bg-primary hover:text-primary-foreground">
+                        <Mail className="h-5 w-5" />
+                      </Button>
+                    </div>
+                  </div>
+                </div>
+              </CardContent>
+            </Card>
+          ))}
+
+          {/* Other Team Members */}
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+            {teamMembers.filter(m => !m.isCeo).map((member, index) => (
               <Card key={index} className="megah-card-hover border-2 border-primary/20 overflow-hidden">
                 <CardContent className="p-0">
                   <div className="relative">
@@ -88,23 +155,23 @@ const Team = () => {
                     />
                     <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent"></div>
                     <div className="absolute bottom-4 left-4 text-white">
-                      <h3 className="text-2xl font-bold">{member.name}</h3>
-                      <p className="text-white/80">{member.role}</p>
+                      <h3 className="text-xl font-bold">{member.name}</h3>
+                      <p className="text-white/80 text-sm">{member.role}</p>
                     </div>
                   </div>
                   
                   <div className="p-6">
-                    <p className="text-muted-foreground mb-4 leading-relaxed">
+                    <p className="text-muted-foreground mb-4 leading-relaxed text-sm">
                       {member.bio}
                     </p>
                     
                     <div className="mb-4">
-                      <h4 className="font-semibold mb-2">Specialties:</h4>
+                      <h4 className="font-semibold mb-2 text-sm">{t('team.specialties')}</h4>
                       <div className="flex flex-wrap gap-2">
                         {member.specialties.map((specialty, idx) => (
                           <span 
                             key={idx}
-                            className="px-3 py-1 bg-primary/10 text-primary rounded-full text-sm"
+                            className="px-2 py-1 bg-primary/10 text-primary rounded-full text-xs"
                           >
                             {specialty}
                           </span>
@@ -112,15 +179,15 @@ const Team = () => {
                       </div>
                     </div>
                     
-                    <div className="flex space-x-3">
-                      <Button variant="ghost" size="icon" className="hover:text-primary">
-                        <Github className="h-5 w-5" />
+                    <div className="flex space-x-2">
+                      <Button variant="ghost" size="icon" className="h-8 w-8 hover:text-primary">
+                        <Github className="h-4 w-4" />
                       </Button>
-                      <Button variant="ghost" size="icon" className="hover:text-primary">
-                        <Linkedin className="h-5 w-5" />
+                      <Button variant="ghost" size="icon" className="h-8 w-8 hover:text-primary">
+                        <Linkedin className="h-4 w-4" />
                       </Button>
-                      <Button variant="ghost" size="icon" className="hover:text-primary">
-                        <Mail className="h-5 w-5" />
+                      <Button variant="ghost" size="icon" className="h-8 w-8 hover:text-primary">
+                        <Mail className="h-4 w-4" />
                       </Button>
                     </div>
                   </div>
@@ -135,9 +202,9 @@ const Team = () => {
       <section className="py-20 bg-card">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-16">
-            <h2 className="text-4xl font-bold mb-6 megah-gradient-text">What Drives Us</h2>
+            <h2 className="text-4xl font-bold mb-6 megah-gradient-text">{t('team.valuesDriveTitle')}</h2>
             <p className="text-xl text-muted-foreground max-w-3xl mx-auto">
-              The values and principles that unite our team in building extraordinary solutions
+              {t('team.valuesDriveSubtitle')}
             </p>
           </div>
 
@@ -146,9 +213,9 @@ const Team = () => {
               <div className="w-20 h-20 bg-gradient-primary rounded-full flex items-center justify-center mx-auto mb-4">
                 <span className="text-white text-2xl font-bold">🚀</span>
               </div>
-              <h3 className="text-xl font-semibold mb-3">Innovation First</h3>
+              <h3 className="text-xl font-semibold mb-3">{t('team.innovationFirst')}</h3>
               <p className="text-muted-foreground">
-                We constantly push boundaries and embrace new technologies to create groundbreaking solutions.
+                {t('team.innovationFirstDesc')}
               </p>
             </div>
             
@@ -156,9 +223,9 @@ const Team = () => {
               <div className="w-20 h-20 bg-gradient-accent rounded-full flex items-center justify-center mx-auto mb-4">
                 <span className="text-white text-2xl font-bold">🤝</span>
               </div>
-              <h3 className="text-xl font-semibold mb-3">Collaboration</h3>
+              <h3 className="text-xl font-semibold mb-3">{t('team.collaboration')}</h3>
               <p className="text-muted-foreground">
-                Our diverse expertise combines to deliver solutions greater than the sum of our parts.
+                {t('team.collaborationDesc')}
               </p>
             </div>
             
@@ -166,9 +233,9 @@ const Team = () => {
               <div className="w-20 h-20 bg-gradient-secondary rounded-full flex items-center justify-center mx-auto mb-4">
                 <span className="text-white text-2xl font-bold">🎯</span>
               </div>
-              <h3 className="text-xl font-semibold mb-3">Excellence</h3>
+              <h3 className="text-xl font-semibold mb-3">{t('team.excellence')}</h3>
               <p className="text-muted-foreground">
-                Every project receives our full attention to detail and commitment to quality.
+                {t('team.excellenceDesc')}
               </p>
             </div>
           </div>
@@ -178,12 +245,12 @@ const Team = () => {
       {/* Join Us Section */}
       <section className="py-20 megah-hero-bg">
         <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
-          <h2 className="text-4xl font-bold text-white mb-6">Join Our Mission</h2>
+          <h2 className="text-4xl font-bold text-white mb-6">{t('team.joinTitle')}</h2>
           <p className="text-xl text-white/80 mb-8">
-            Ready to be part of Africa's tech revolution? We're always looking for talented individuals to join our team.
+            {t('team.joinSubtitle')}
           </p>
           <Button className="megah-btn-primary px-8 py-3 text-lg">
-            View Open Positions
+            {t('team.viewPositions')}
           </Button>
         </div>
       </section>

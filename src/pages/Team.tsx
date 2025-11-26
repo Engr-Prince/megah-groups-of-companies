@@ -5,8 +5,8 @@ import { Github, Linkedin, Mail, Facebook, Instagram } from "lucide-react";
 import { useLanguage } from "@/contexts/LanguageContext";
 import megahCeoPic from "@/assets/megah-ceo.jpg";
 import queenPic from "@/assets/team-queen.jpg";
+import preciousPic from "@/assets/team-precious.jpg";
 import janePic from "@/assets/team-jane.jpg";
-import johnPic from "@/assets/team-john.jpg";
 
 const Team = () => {
   const { t } = useLanguage();
@@ -44,6 +44,17 @@ const Team = () => {
       }
     },
     {
+      name: "Miss Angel Precious",
+      role: "UI/UX Designer",
+      image: preciousPic,
+      bio: "Creative designer crafting beautiful and intuitive user experiences. Expert in modern design systems and user-centered design.",
+      specialties: ["UI/UX Design", "Design Systems", "Prototyping", "User Research"],
+      social: {
+        linkedin: "#",
+        email: "precious@megahgroup.com"
+      }
+    },
+    {
       name: "Jane Doe",
       role: "Project Manager",
       image: janePic,
@@ -53,18 +64,6 @@ const Team = () => {
         github: "#",
         linkedin: "#",
         email: "jane@megahgroup.com"
-      }
-    },
-    {
-      name: "John Smith",
-      role: "UI/UX Designer",
-      image: johnPic,
-      bio: "Creative designer crafting beautiful and intuitive user experiences. Expert in modern design systems and user-centered design.",
-      specialties: ["UI/UX Design", "Design Systems", "Prototyping", "User Research"],
-      social: {
-        github: "#",
-        linkedin: "#",
-        email: "john@megahgroup.com"
       }
     }
   ];
@@ -151,7 +150,7 @@ const Team = () => {
                     <img 
                       src={member.image} 
                       alt={member.name}
-                      className={`w-full h-64 object-cover ${member.name === "Miss Ndi Queen Onella" ? "object-[center_15%]" : ""}`}
+                      className={`w-full h-64 object-cover ${member.name === "Miss Ndi Queen Onella" ? "object-[center_15%]" : member.name === "Miss Angel Precious" ? "object-[center_20%]" : ""}`}
                     />
                     <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent"></div>
                     <div className="absolute bottom-4 left-4 text-white">

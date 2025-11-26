@@ -212,7 +212,7 @@ const Support = () => {
             <div className="megah-glass rounded-xl p-8 text-center">
               <Mail className="h-12 w-12 text-megah-green mx-auto mb-4" />
               <h3 className="text-xl font-semibold text-white mb-2">Email Us</h3>
-              <p className="text-white/80 mb-4">partnerships@megahgroup.com</p>
+              <p className="text-white/80 mb-4">megahprince82@gmail.com</p>
               <Button className="megah-btn-primary">
                 Send Email
               </Button>
@@ -221,7 +221,7 @@ const Support = () => {
             <div className="megah-glass rounded-xl p-8 text-center">
               <Phone className="h-12 w-12 text-megah-yellow mx-auto mb-4" />
               <h3 className="text-xl font-semibold text-white mb-2">Call Us</h3>
-              <p className="text-white/80 mb-4">+237 XXX XXX XXX</p>
+              <p className="text-white/80 mb-4">+237 675859441</p>
               <Button className="megah-btn-primary">
                 Schedule Call
               </Button>

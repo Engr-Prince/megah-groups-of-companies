@@ -1,7 +1,7 @@
 import Layout from "@/components/Layout";
 import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
-import { Github, Linkedin, Mail } from "lucide-react";
+import { Github, Linkedin, Mail, Facebook, Instagram } from "lucide-react";
 import { useLanguage } from "@/contexts/LanguageContext";
 import megahCeoPic from "@/assets/megah-ceo.jpg";
 import queenPic from "@/assets/team-queen.jpg";
@@ -38,8 +38,8 @@ const Team = () => {
       bio: "Strategic marketing professional driving growth and brand awareness. Specialist in digital marketing and community building.",
       specialties: ["Digital Marketing", "Brand Strategy", "Content Creation", "Community Building"],
       social: {
-        github: "#",
-        linkedin: "#",
+        facebook: "#",
+        instagram: "#",
         email: "queen@megahgroup.com"
       }
     },
@@ -151,7 +151,7 @@ const Team = () => {
                     <img 
                       src={member.image} 
                       alt={member.name}
-                      className="w-full h-64 object-cover"
+                      className={`w-full h-64 object-cover ${member.name === "Miss Ndi Queen Onella" ? "object-bottom" : ""}`}
                     />
                     <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent"></div>
                     <div className="absolute bottom-4 left-4 text-white">
@@ -180,12 +180,26 @@ const Team = () => {
                     </div>
                     
                     <div className="flex space-x-2">
-                      <Button variant="ghost" size="icon" className="h-8 w-8 hover:text-primary">
-                        <Github className="h-4 w-4" />
-                      </Button>
-                      <Button variant="ghost" size="icon" className="h-8 w-8 hover:text-primary">
-                        <Linkedin className="h-4 w-4" />
-                      </Button>
+                      {member.social.facebook && (
+                        <Button variant="ghost" size="icon" className="h-8 w-8 hover:text-primary">
+                          <Facebook className="h-4 w-4" />
+                        </Button>
+                      )}
+                      {member.social.instagram && (
+                        <Button variant="ghost" size="icon" className="h-8 w-8 hover:text-primary">
+                          <Instagram className="h-4 w-4" />
+                        </Button>
+                      )}
+                      {member.social.github && (
+                        <Button variant="ghost" size="icon" className="h-8 w-8 hover:text-primary">
+                          <Github className="h-4 w-4" />
+                        </Button>
+                      )}
+                      {member.social.linkedin && (
+                        <Button variant="ghost" size="icon" className="h-8 w-8 hover:text-primary">
+                          <Linkedin className="h-4 w-4" />
+                        </Button>
+                      )}
                       <Button variant="ghost" size="icon" className="h-8 w-8 hover:text-primary">
                         <Mail className="h-4 w-4" />
                       </Button>

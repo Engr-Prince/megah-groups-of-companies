@@ -365,8 +365,8 @@ const Contact = () => {
                     <div>
                       <h3 className="text-lg font-semibold mb-2">Phone</h3>
                       <p className="text-muted-foreground">
-                        +237 XXX XXX XXX<br />
-                        +237 XXX XXX XXX (WhatsApp)
+                        +237 675859441<br />
+                        +237 675859441 (WhatsApp)
                       </p>
                     </div>
                   </div>
@@ -383,8 +383,8 @@ const Contact = () => {
                     <div>
                       <h3 className="text-lg font-semibold mb-2">Email</h3>
                       <p className="text-muted-foreground">
-                        info@megahgroup.com<br />
-                        support@megahgroup.com
+                        megahprince82@gmail.com<br />
+                        megahprince82@gmail.com
                       </p>
                     </div>
                   </div>

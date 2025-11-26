@@ -62,8 +62,8 @@ const Footer = () => {
             <h3 className="font-semibold mb-4">Connect</h3>
             <div className="space-y-2 mb-4">
               <p className="text-muted-foreground">Douala, Cameroon</p>
-              <p className="text-muted-foreground">info@megahgroup.com</p>
-              <p className="text-muted-foreground">+237 XXX XXX XXX</p>
+              <p className="text-muted-foreground">megahprince82@gmail.com</p>
+              <p className="text-muted-foreground">+237 675859441</p>
             </div>
             <div className="flex space-x-3">
               <Button variant="ghost" size="icon" className="hover:text-primary">

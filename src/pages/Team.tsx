@@ -50,6 +50,8 @@ const Team = () => {
       bio: "Creative designer crafting beautiful and intuitive user experiences. Expert in modern design systems and user-centered design.",
       specialties: ["UI/UX Design", "Design Systems", "Prototyping", "User Research"],
       social: {
+        facebook: "#",
+        instagram: "#",
         linkedin: "#",
         email: "precious@megahgroup.com"
       }

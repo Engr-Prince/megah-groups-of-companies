@@ -116,76 +116,88 @@ const handler = async (req: Request): Promise<Response> => {
 
     console.log("Inquiry saved to database:", inquiry.id);
 
-    // Escape user input for safe HTML rendering in emails
-    const safeFirstName = escapeHtml(contactData.firstName);
-    const safeLastName = escapeHtml(contactData.lastName);
-    const safeEmail = escapeHtml(contactData.email);
-    const safePhone = contactData.phone ? escapeHtml(contactData.phone) : null;
-    const safeCompany = contactData.company ? escapeHtml(contactData.company) : null;
-    const safeService = contactData.service ? escapeHtml(contactData.service) : null;
-    const safeBudget = contactData.budget ? escapeHtml(contactData.budget) : null;
-    const safeTimeline = contactData.timeline ? escapeHtml(contactData.timeline) : null;
-    const safeMessage = escapeHtml(contactData.message);
+    // Return success immediately after database save
+    // Email notifications are optional and failures won't affect user experience
+    let emailStatus = { admin: false, user: false };
 
-    // Send notification email to admin
-    const adminEmailHtml = `
-      <h2>New Contact Inquiry from MEGAH Website</h2>
-      <p><strong>Name:</strong> ${safeFirstName} ${safeLastName}</p>
-      <p><strong>Email:</strong> ${safeEmail}</p>
-      ${safePhone ? `<p><strong>Phone:</strong> ${safePhone}</p>` : ''}
-      ${safeCompany ? `<p><strong>Company:</strong> ${safeCompany}</p>` : ''}
-      ${safeService ? `<p><strong>Service Interest:</strong> ${safeService}</p>` : ''}
-      ${safeBudget ? `<p><strong>Budget:</strong> ${safeBudget}</p>` : ''}
-      ${safeTimeline ? `<p><strong>Timeline:</strong> ${safeTimeline}</p>` : ''}
-      <p><strong>Message:</strong></p>
-      <p>${safeMessage}</p>
-      <hr>
-      <p><small>Submitted at: ${new Date().toLocaleString()}</small></p>
-    `;
+    // Try to send emails but don't fail if they don't work
+    try {
+      // Escape user input for safe HTML rendering in emails
+      const safeFirstName = escapeHtml(contactData.firstName);
+      const safeLastName = escapeHtml(contactData.lastName);
+      const safeEmail = escapeHtml(contactData.email);
+      const safePhone = contactData.phone ? escapeHtml(contactData.phone) : null;
+      const safeCompany = contactData.company ? escapeHtml(contactData.company) : null;
+      const safeService = contactData.service ? escapeHtml(contactData.service) : null;
+      const safeBudget = contactData.budget ? escapeHtml(contactData.budget) : null;
+      const safeTimeline = contactData.timeline ? escapeHtml(contactData.timeline) : null;
+      const safeMessage = escapeHtml(contactData.message);
 
-    const { error: adminEmailError } = await resend.emails.send({
-      from: "MEGAH Contact <onboarding@resend.dev>",
-      to: ["megahprince82@gmail.com"],
-      subject: `New Contact Inquiry from ${safeFirstName} ${safeLastName}`,
-      html: adminEmailHtml,
-    });
+      // Send notification email to admin
+      const adminEmailHtml = `
+        <h2>New Contact Inquiry from MEGAH Website</h2>
+        <p><strong>Name:</strong> ${safeFirstName} ${safeLastName}</p>
+        <p><strong>Email:</strong> ${safeEmail}</p>
+        ${safePhone ? `<p><strong>Phone:</strong> ${safePhone}</p>` : ''}
+        ${safeCompany ? `<p><strong>Company:</strong> ${safeCompany}</p>` : ''}
+        ${safeService ? `<p><strong>Service Interest:</strong> ${safeService}</p>` : ''}
+        ${safeBudget ? `<p><strong>Budget:</strong> ${safeBudget}</p>` : ''}
+        ${safeTimeline ? `<p><strong>Timeline:</strong> ${safeTimeline}</p>` : ''}
+        <p><strong>Message:</strong></p>
+        <p>${safeMessage}</p>
+        <hr>
+        <p><small>Submitted at: ${new Date().toLocaleString()}</small></p>
+      `;
 
-    if (adminEmailError) {
-      console.error("Failed to send admin notification:", adminEmailError);
-    } else {
-      console.log("Admin notification sent successfully");
-    }
+      const { error: adminEmailError } = await resend.emails.send({
+        from: "MEGAH Contact <onboarding@resend.dev>",
+        to: ["megahprince82@gmail.com"],
+        subject: `New Contact Inquiry from ${safeFirstName} ${safeLastName}`,
+        html: adminEmailHtml,
+      });
 
-    // Send confirmation email to user
-    const userEmailHtml = `
-      <h2>Thank you for contacting MEGAH!</h2>
-      <p>Dear ${safeFirstName},</p>
-      <p>We have received your message and will get back to you as soon as possible.</p>
-      <p><strong>Your message:</strong></p>
-      <p>${safeMessage}</p>
-      <br>
-      <p>Best regards,</p>
-      <p><strong>The MEGAH Team</strong></p>
-    `;
+      if (adminEmailError) {
+        console.warn("Failed to send admin notification (non-critical):", adminEmailError);
+      } else {
+        console.log("Admin notification sent successfully");
+        emailStatus.admin = true;
+      }
 
-    const { error: userEmailError } = await resend.emails.send({
-      from: "MEGAH <onboarding@resend.dev>",
-      to: [contactData.email],
-      subject: "We received your message - MEGAH",
-      html: userEmailHtml,
-    });
+      // Send confirmation email to user
+      const userEmailHtml = `
+        <h2>Thank you for contacting MEGAH!</h2>
+        <p>Dear ${safeFirstName},</p>
+        <p>We have received your message and will get back to you as soon as possible.</p>
+        <p><strong>Your message:</strong></p>
+        <p>${safeMessage}</p>
+        <br>
+        <p>Best regards,</p>
+        <p><strong>The MEGAH Team</strong></p>
+      `;
 
-    if (userEmailError) {
-      console.error("Failed to send user confirmation:", userEmailError);
-    } else {
-      console.log("User confirmation sent successfully");
+      const { error: userEmailError } = await resend.emails.send({
+        from: "MEGAH <onboarding@resend.dev>",
+        to: [contactData.email],
+        subject: "We received your message - MEGAH",
+        html: userEmailHtml,
+      });
+
+      if (userEmailError) {
+        console.warn("Failed to send user confirmation (non-critical):", userEmailError);
+      } else {
+        console.log("User confirmation sent successfully");
+        emailStatus.user = true;
+      }
+    } catch (emailError) {
+      console.warn("Email sending failed (non-critical):", emailError);
     }
 
     return new Response(
       JSON.stringify({ 
         success: true, 
         message: "Contact inquiry received successfully",
-        id: inquiry.id 
+        id: inquiry.id,
+        emailsSent: emailStatus
       }),
       {
         status: 200,

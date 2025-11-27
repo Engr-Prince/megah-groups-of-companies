@@ -20,7 +20,7 @@ const Footer = () => {
             <Link to="/" className="inline-block">
               <img 
                 src={megahLogo} 
-                alt="MEGAH Group of Companies" 
+                alt="megahgroupsofcompanies" 
                 className="h-16 w-auto"
               />
             </Link>

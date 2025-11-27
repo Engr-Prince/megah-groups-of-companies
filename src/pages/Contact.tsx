@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import Layout from "@/components/Layout";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
@@ -8,7 +8,6 @@ import { Label } from "@/components/ui/label";
 import { MapPin, Phone, Mail, Clock, Send, Facebook, Twitter, Instagram, Linkedin, Youtube, AlertCircle } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
 import Map from "@/components/Map";
-import { supabase } from "@/integrations/supabase/client";
 import { useLanguage } from "@/contexts/LanguageContext";
 import { 
   sanitizeInput, 
@@ -36,6 +35,19 @@ const Contact = () => {
   const [formErrors, setFormErrors] = useState<Record<string, string>>({});
   const [isSubmitting, setIsSubmitting] = useState(false);
   const rateLimiter = new RateLimiter();
+
+  // Handle success redirect from Web3Forms
+  useEffect(() => {
+    const params = new URLSearchParams(window.location.search);
+    if (params.get('success') === 'true') {
+      toast({
+        title: "Message Sent Successfully!",
+        description: "We've received your message and will get back to you within 24 hours.",
+      });
+      // Clean up URL
+      window.history.replaceState({}, '', '/contact');
+    }
+  }, [toast]);
 
   const handleInputChange = (field: string, value: string) => {
     const sanitizedValue = sanitizeInput(value);
@@ -82,11 +94,10 @@ const Contact = () => {
     return Object.keys(errors).length === 0;
   };
 
-  const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
-    
+  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     // Rate limiting check
     if (!rateLimiter.canAttempt('contact-form', 3, 60000)) {
+      e.preventDefault();
       toast({
         title: "Too many attempts",
         description: "Please wait before submitting again.",
@@ -96,6 +107,7 @@ const Contact = () => {
     }
 
     if (!validateForm()) {
+      e.preventDefault();
       // Scroll to first error
       const firstErrorField = Object.keys(formErrors)[0];
       const element = document.getElementById(firstErrorField);
@@ -112,55 +124,8 @@ const Contact = () => {
       return;
     }
 
+    // If validation passes, form will submit naturally to Web3Forms
     setIsSubmitting(true);
-    
-    try {
-      const { data, error } = await supabase.functions.invoke('send-web3forms', {
-        body: {
-          name: `${formData.firstName} ${formData.lastName}`,
-          email: formData.email,
-          phone: formData.phone || "Not provided",
-          company: formData.company || "Not provided",
-          service: formData.service || "Not specified",
-          budget: formData.budget || "Not specified",
-          message: formData.message,
-          timeline: formData.timeline || "Not specified",
-          subject: `New Contact Form Submission: ${formData.service || 'General Inquiry'}`,
-          botcheck: "",
-        }
-      });
-
-      if (error) throw error;
-      if (!data?.success) throw new Error(data?.message || "Submission failed");
-
-      toast({
-        title: "Message Sent Successfully!",
-        description: "We've received your message and will get back to you within 24 hours.",
-      });
-      
-      // Reset form
-      setFormData({
-        firstName: '',
-        lastName: '',
-        email: '',
-        phone: '',
-        company: '',
-        service: '',
-        budget: '',
-        message: '',
-        timeline: ''
-      });
-      setFormErrors({});
-    } catch (error) {
-      console.error('Error submitting contact form:', error);
-      toast({
-        title: "Submission Failed",
-        description: "There was a problem sending your message. Please try again or contact us directly.",
-        variant: "destructive",
-      });
-    } finally {
-      setIsSubmitting(false);
-    }
   };
 
   return (
@@ -192,12 +157,28 @@ const Contact = () => {
                   </p>
                 </CardHeader>
                 <CardContent>
-                  <form onSubmit={handleSubmit} className="space-y-6">
+                  <form 
+                    action="https://api.web3forms.com/submit" 
+                    method="POST"
+                    onSubmit={handleSubmit}
+                    className="space-y-6"
+                  >
+                    {/* Web3Forms hidden fields */}
+                    <input type="hidden" name="access_key" value="bc39fe5b-e02c-4b05-9b5d-dde9be7c3b39" />
+                    <input type="hidden" name="subject" value="New Contact Form Submission - MEGAH" />
+                    <input type="hidden" name="from_name" value="MEGAH Contact Form" />
+                    <input type="hidden" name="redirect" value={`${window.location.origin}/contact?success=true`} />
+                    <input type="checkbox" name="botcheck" className="hidden" style={{ display: 'none' }} />
+                    
+                    {/* Hidden field to combine first + last name for Web3Forms */}
+                    <input type="hidden" name="name" value={`${formData.firstName} ${formData.lastName}`} />
+
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                       <div>
                         <Label htmlFor="firstName">{t('contact.firstName')} *</Label>
                         <Input 
-                          id="firstName" 
+                          id="firstName"
+                          name="first_name"
                           placeholder="John" 
                           className={`mt-1 ${formErrors.firstName ? 'border-destructive' : ''}`}
                           value={formData.firstName}
@@ -215,7 +196,8 @@ const Contact = () => {
                       <div>
                         <Label htmlFor="lastName">{t('contact.lastName')} *</Label>
                         <Input 
-                          id="lastName" 
+                          id="lastName"
+                          name="last_name"
                           placeholder="Doe" 
                           className={`mt-1 ${formErrors.lastName ? 'border-destructive' : ''}`}
                           value={formData.lastName}
@@ -236,7 +218,8 @@ const Contact = () => {
                       <div>
                         <Label htmlFor="email">{t('contact.email')} *</Label>
                         <Input 
-                          id="email" 
+                          id="email"
+                          name="email"
                           type="email" 
                           placeholder="john@example.com" 
                           className={`mt-1 ${formErrors.email ? 'border-destructive' : ''}`}
@@ -255,7 +238,8 @@ const Contact = () => {
                       <div>
                         <Label htmlFor="phone">{t('contact.phone')}</Label>
                         <Input 
-                          id="phone" 
+                          id="phone"
+                          name="phone"
                           placeholder="+237 XXX XXX XXX" 
                           className={`mt-1 ${formErrors.phone ? 'border-destructive' : ''}`}
                           value={formData.phone}
@@ -275,7 +259,8 @@ const Contact = () => {
                       <div>
                         <Label htmlFor="company">{t('contact.company')}</Label>
                         <Input 
-                          id="company" 
+                          id="company"
+                          name="company"
                           placeholder="Your company name" 
                           className="mt-1"
                           value={formData.company}
@@ -286,6 +271,8 @@ const Contact = () => {
                       <div>
                         <Label htmlFor="service">{t('contact.service')}</Label>
                         <select 
+                          id="service"
+                          name="service"
                           className="w-full mt-1 px-3 py-2 border border-input rounded-md bg-background"
                           value={formData.service}
                           onChange={(e) => handleInputChange('service', e.target.value)}
@@ -303,6 +290,8 @@ const Contact = () => {
                     <div>
                       <Label htmlFor="budget">{t('contact.budget')}</Label>
                       <select 
+                        id="budget"
+                        name="budget"
                         className="w-full mt-1 px-3 py-2 border border-input rounded-md bg-background"
                         value={formData.budget}
                         onChange={(e) => handleInputChange('budget', e.target.value)}
@@ -320,7 +309,8 @@ const Contact = () => {
                     <div>
                       <Label htmlFor="message">{t('contact.message')} *</Label>
                       <Textarea 
-                        id="message" 
+                        id="message"
+                        name="message"
                         placeholder={t('contact.messagePlaceholder')}
                         className={`mt-1 min-h-[150px] ${formErrors.message ? 'border-destructive' : ''}`}
                         value={formData.message}
@@ -344,6 +334,8 @@ const Contact = () => {
                     <div>
                       <Label htmlFor="timeline">{t('contact.timeline')}</Label>
                       <select 
+                        id="timeline"
+                        name="timeline"
                         className="w-full mt-1 px-3 py-2 border border-input rounded-md bg-background"
                         value={formData.timeline}
                         onChange={(e) => handleInputChange('timeline', e.target.value)}
@@ -420,8 +412,8 @@ const Contact = () => {
                     <div>
                       <h3 className="text-lg font-semibold mb-2">{t('contact.email')}</h3>
                       <p className="text-muted-foreground">
-                        megahprince82@gmail.com<br />
-                        megahprince82@gmail.com
+                        info@megahconsult.com<br />
+                        support@megahconsult.com
                       </p>
                     </div>
                   </div>
@@ -429,45 +421,44 @@ const Contact = () => {
               </Card>
 
               {/* Business Hours */}
-              <Card className="megah-card-hover border-2 border-megah-green/20">
+              <Card className="megah-card-hover border-2 border-megah-yellow/20">
                 <CardContent className="p-6">
                   <div className="flex items-start space-x-4">
-                    <div className="w-12 h-12 bg-megah-green rounded-full flex items-center justify-center">
+                    <div className="w-12 h-12 bg-gradient-to-r from-megah-yellow to-megah-green rounded-full flex items-center justify-center">
                       <Clock className="h-6 w-6 text-white" />
                     </div>
                     <div>
                       <h3 className="text-lg font-semibold mb-2">{t('contact.businessHours')}</h3>
-                      <div className="text-muted-foreground space-y-1">
-                        <p>{t('contact.monday')}</p>
-                        <p>{t('contact.saturday')}</p>
-                        <p>{t('contact.sunday')}</p>
-                        <p className="text-sm text-primary">{t('contact.emergency')}</p>
-                      </div>
+                      <p className="text-muted-foreground">
+                        {t('contact.weekdays')}: 8:00 AM - 6:00 PM<br />
+                        {t('contact.saturday')}: 9:00 AM - 2:00 PM<br />
+                        {t('contact.sunday')}: {t('contact.closed')}
+                      </p>
                     </div>
                   </div>
                 </CardContent>
               </Card>
 
               {/* Social Media */}
-              <Card className="megah-card-hover border-2 border-megah-yellow/20">
+              <Card className="border-2 border-primary/20">
                 <CardContent className="p-6">
-                  <h3 className="text-lg font-semibold mb-4">{t('contact.socialMedia')}</h3>
-                  <div className="flex space-x-3">
-                    <Button variant="ghost" size="icon" className="hover:text-primary">
-                      <Facebook className="h-5 w-5" />
-                    </Button>
-                    <Button variant="ghost" size="icon" className="hover:text-primary">
-                      <Twitter className="h-5 w-5" />
-                    </Button>
-                    <Button variant="ghost" size="icon" className="hover:text-primary">
-                      <Instagram className="h-5 w-5" />
-                    </Button>
-                    <Button variant="ghost" size="icon" className="hover:text-primary">
-                      <Linkedin className="h-5 w-5" />
-                    </Button>
-                    <Button variant="ghost" size="icon" className="hover:text-primary">
-                      <Youtube className="h-5 w-5" />
-                    </Button>
+                  <h3 className="text-lg font-semibold mb-4">{t('contact.followUs')}</h3>
+                  <div className="flex space-x-4">
+                    <a href="https://www.facebook.com/share/1FTdNP8Kbi/?mibextid=wwXIfr" target="_blank" rel="noopener noreferrer" className="w-10 h-10 bg-primary/10 rounded-full flex items-center justify-center hover:bg-primary/20 transition-colors">
+                      <Facebook className="h-5 w-5 text-primary" />
+                    </a>
+                    <a href="#" className="w-10 h-10 bg-primary/10 rounded-full flex items-center justify-center hover:bg-primary/20 transition-colors">
+                      <Twitter className="h-5 w-5 text-primary" />
+                    </a>
+                    <a href="#" className="w-10 h-10 bg-primary/10 rounded-full flex items-center justify-center hover:bg-primary/20 transition-colors">
+                      <Instagram className="h-5 w-5 text-primary" />
+                    </a>
+                    <a href="https://www.linkedin.com/company/megahconsult/" target="_blank" rel="noopener noreferrer" className="w-10 h-10 bg-primary/10 rounded-full flex items-center justify-center hover:bg-primary/20 transition-colors">
+                      <Linkedin className="h-5 w-5 text-primary" />
+                    </a>
+                    <a href="#" className="w-10 h-10 bg-primary/10 rounded-full flex items-center justify-center hover:bg-primary/20 transition-colors">
+                      <Youtube className="h-5 w-5 text-primary" />
+                    </a>
                   </div>
                 </CardContent>
               </Card>
@@ -477,16 +468,15 @@ const Contact = () => {
       </section>
 
       {/* Map Section */}
-      <section className="py-20 bg-card">
+      <section className="py-20 bg-muted">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-12">
-            <h2 className="text-4xl font-bold mb-6 megah-gradient-text">{t('contact.mapTitle')}</h2>
-            <p className="text-xl text-muted-foreground">
-              {t('contact.mapDesc')}
+            <h2 className="text-4xl font-bold megah-gradient-text mb-4">{t('contact.findUs')}</h2>
+            <p className="text-muted-foreground text-lg">
+              {t('contact.findUsDesc')}
             </p>
           </div>
-          
-          <div className="bg-muted rounded-xl overflow-hidden">
+          <div className="rounded-2xl overflow-hidden border-4 border-primary/20 shadow-xl">
             <Map />
           </div>
         </div>
@@ -495,13 +485,24 @@ const Contact = () => {
       {/* CTA Section */}
       <section className="py-20 megah-hero-bg">
         <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
-          <h2 className="text-4xl font-bold text-white mb-6">{t('contact.ctaTitle')}</h2>
+          <h2 className="text-4xl md:text-5xl font-bold text-white mb-6">
+            {t('contact.ctaTitle')}
+          </h2>
           <p className="text-xl text-white/80 mb-8">
             {t('contact.ctaDesc')}
           </p>
-          <Button className="megah-btn-primary px-12 py-4 text-lg">
-            {t('contact.ctaBtn')}
-          </Button>
+          <div className="flex flex-col sm:flex-row gap-4 justify-center">
+            <a href="tel:+237675859441">
+              <Button size="lg" className="megah-btn-primary px-8 py-4 text-lg">
+                <Phone className="mr-2 h-5 w-5" /> {t('contact.callNow')}
+              </Button>
+            </a>
+            <a href="mailto:info@megahconsult.com">
+              <Button size="lg" variant="outline" className="border-white text-white hover:bg-white/10 px-8 py-4 text-lg">
+                <Mail className="mr-2 h-5 w-5" /> {t('contact.emailUs')}
+              </Button>
+            </a>
+          </div>
         </div>
       </section>
     </Layout>

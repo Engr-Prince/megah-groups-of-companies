@@ -115,41 +115,20 @@ const Support = () => {
     setIsSubmitting(true);
 
     try {
-      // Validate form data
       const validatedData = partnershipSchema.parse(formData);
 
-      // Save to database
-      const { error: dbError } = await supabase
-        .from('partnership_inquiries')
-        .insert([{
+      // Single call to edge function handles both database and emails
+      const { data, error } = await supabase.functions.invoke('send-partnership-notification', {
+        body: {
           name: validatedData.name,
           email: validatedData.email,
-          organization: validatedData.organization || null,
-          support_type: validatedData.supportType,
+          organization: validatedData.organization,
+          supportType: validatedData.supportType,
           message: validatedData.message,
-        }]);
-
-      if (dbError) throw dbError;
-
-      // Send notification email (wrapped in try-catch to not fail submission)
-      try {
-        const { error: emailError } = await supabase.functions.invoke('send-partnership-notification', {
-          body: {
-            name: validatedData.name,
-            email: validatedData.email,
-            organization: validatedData.organization,
-            supportType: validatedData.supportType,
-            message: validatedData.message,
-          }
-        });
-
-        if (emailError) {
-          console.error('Email notification error:', emailError);
         }
-      } catch (emailNetworkError) {
-        console.error('Email notification network error:', emailNetworkError);
-        // Don't fail the whole submission if email fails
-      }
+      });
+
+      if (error) throw error;
 
       toast({
         title: "Inquiry Submitted! ✅",

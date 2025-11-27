@@ -32,7 +32,7 @@ const Team = () => {
       isCeo: true
     },
     {
-      name: "Miss NDIP Queen Onella",
+      name: "Miss. Ndip Queen Onella",
       role: "Marketing Lead",
       image: queenPic,
       bio: "Strategic marketing professional driving growth and brand awareness. Specialist in digital marketing and community building.",
@@ -152,7 +152,7 @@ const Team = () => {
                     <img 
                       src={member.image} 
                       alt={member.name}
-                      className={`w-full h-64 object-cover ${member.name === "Miss NDIP Queen Onella" ? "object-[center_15%]" : member.name === "Engr. Angel Precious" ? "object-[center_20%]" : ""}`}
+                      className={`w-full h-64 object-cover ${member.name === "Miss. Ndip Queen Onella" ? "object-[center_15%]" : member.name === "Engr. Angel Precious" ? "object-[center_20%]" : ""}`}
                     />
                     <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent"></div>
                     <div className="absolute bottom-4 left-4 text-white">

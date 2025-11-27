@@ -321,10 +321,10 @@ const Support = () => {
             <div className="megah-glass rounded-xl p-8 text-center">
               <Mail className="h-12 w-12 text-megah-green mx-auto mb-4" />
               <h3 className="text-xl font-semibold text-white mb-2">{t('support.emailUs')}</h3>
-              <p className="text-white/80 mb-4">megahprince82@gmail.com</p>
+              <p className="text-white/80 mb-4">megahgroupsofcompanies@gmail.com</p>
               <Button 
                 className="megah-btn-primary"
-                onClick={() => window.location.href = 'mailto:megahprince82@gmail.com'}
+                onClick={() => window.location.href = 'mailto:megahgroupsofcompanies@gmail.com'}
               >
                 {t('support.emailUs')}
               </Button>

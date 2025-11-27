@@ -90,9 +90,11 @@ const Support = () => {
     },
     {
       icon: Building2,
-      title: "Bank Transfer",
-      details: "Contact for details",
-      description: "Direct bank transfer available",
+      title: "Bank Transfer (India Bank)",
+      details: "80 88 83 15 37",
+      accountName: "TABINYOR PRINCE EMMANUEL AGBOR",
+      ifsc: "IDIB000R551",
+      description: "Direct bank transfer to India Bank",
       gradient: "from-primary to-megah-blue"
     }
   ];
@@ -225,19 +227,36 @@ const Support = () => {
                   <p className="text-muted-foreground">{method.description}</p>
                 </CardHeader>
                 <CardContent className="text-center">
-                  <div className="bg-background/50 rounded-lg p-4 mb-4">
-                    <p className="text-2xl font-bold megah-gradient-text mb-2">
-                      {method.details}
-                    </p>
+                  <div className="bg-background/50 rounded-lg p-4 mb-4 space-y-2">
+                    <div>
+                      <p className="text-sm text-muted-foreground mb-1">Account Number</p>
+                      <p className="text-2xl font-bold megah-gradient-text">
+                        {method.details}
+                      </p>
+                    </div>
+                    {method.accountName && (
+                      <div>
+                        <p className="text-sm text-muted-foreground mb-1">Account Name</p>
+                        <p className="text-sm font-semibold text-foreground">
+                          {method.accountName}
+                        </p>
+                      </div>
+                    )}
+                    {method.ifsc && (
+                      <div>
+                        <p className="text-sm text-muted-foreground mb-1">IFSC Code</p>
+                        <p className="text-lg font-bold text-foreground">
+                          {method.ifsc}
+                        </p>
+                      </div>
+                    )}
                   </div>
-                  {method.details !== "Contact for details" && (
-                    <Button 
-                      onClick={() => copyToClipboard(method.details, method.title)}
-                      className="w-full megah-btn-primary"
-                    >
-                      <Copy className="mr-2 h-4 w-4" /> Copy Details
-                    </Button>
-                  )}
+                  <Button 
+                    onClick={() => copyToClipboard(method.details, "Account Number")}
+                    className="w-full megah-btn-primary"
+                  >
+                    <Copy className="mr-2 h-4 w-4" /> Copy Account Number
+                  </Button>
                 </CardContent>
               </Card>
             ))}

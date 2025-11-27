@@ -8,6 +8,7 @@ import { Label } from "@/components/ui/label";
 import { Heart, Users, Building, ArrowRight, CheckCircle, Mail, Phone, Copy, CreditCard, Smartphone, Building2 } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
 import { supabase } from "@/integrations/supabase/client";
+import { useLanguage } from "@/contexts/LanguageContext";
 import { z } from "zod";
 
 const partnershipSchema = z.object({
@@ -22,6 +23,7 @@ type PartnershipFormData = z.infer<typeof partnershipSchema>;
 
 const Support = () => {
   const { toast } = useToast();
+  const { t } = useLanguage();
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [formData, setFormData] = useState<PartnershipFormData>({
     name: "",
@@ -172,10 +174,10 @@ const Support = () => {
       <section className="py-20 megah-hero-bg">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
           <h1 className="text-5xl md:text-6xl font-bold text-white mb-6 animate-slide-up">
-            Support & <span className="megah-gradient-text bg-gradient-to-r from-megah-yellow to-megah-green bg-clip-text text-transparent">Sponsorship</span>
+            {t('support.heroTitle')} <span className="megah-gradient-text bg-gradient-to-r from-megah-yellow to-megah-green bg-clip-text text-transparent">{t('support.heroHighlight')}</span>
           </h1>
           <p className="text-xl text-white/80 max-w-3xl mx-auto">
-            Join us in building the future of African technology. Your support empowers the next generation of innovators.
+            {t('support.heroSubtitle')}
           </p>
         </div>
       </section>
@@ -184,9 +186,9 @@ const Support = () => {
       <section className="py-20 bg-background">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-16">
-            <h2 className="text-4xl font-bold mb-6 megah-gradient-text">Our Impact</h2>
+            <h2 className="text-4xl font-bold mb-6 megah-gradient-text">{t('support.impactTitle')}</h2>
             <p className="text-xl text-muted-foreground max-w-3xl mx-auto">
-              See how your support creates real change in African tech communities
+              {t('support.impactDesc')}
             </p>
           </div>
           
@@ -209,9 +211,9 @@ const Support = () => {
       <section className="py-20 bg-card">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-16">
-            <h2 className="text-4xl font-bold mb-6 megah-gradient-text">How to Donate</h2>
+            <h2 className="text-4xl font-bold mb-6 megah-gradient-text">{t('support.paymentTitle')}</h2>
             <p className="text-xl text-muted-foreground max-w-3xl mx-auto">
-              Choose your preferred payment method to support MEGAH
+              {t('support.paymentDesc')}
             </p>
           </div>
 
@@ -268,7 +270,7 @@ const Support = () => {
       <section className="py-20 bg-background">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-16">
-            <h2 className="text-4xl font-bold mb-6 megah-gradient-text">Ways to Support</h2>
+            <h2 className="text-4xl font-bold mb-6 megah-gradient-text">{t('support.supportTitle')}</h2>
             <p className="text-xl text-muted-foreground max-w-3xl mx-auto">
               Choose the support option that aligns with your goals and capacity
             </p>
@@ -309,34 +311,34 @@ const Support = () => {
       <section className="py-20 megah-hero-bg">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-12">
-            <h2 className="text-4xl font-bold text-white mb-6">Get in Touch Directly</h2>
+            <h2 className="text-4xl font-bold text-white mb-6">{t('support.contactTitle')}</h2>
             <p className="text-xl text-white/80 max-w-3xl mx-auto">
-              Prefer a direct conversation? Reach out to our partnerships team
+              {t('support.contactDesc')}
             </p>
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-2 gap-8 max-w-4xl mx-auto">
             <div className="megah-glass rounded-xl p-8 text-center">
               <Mail className="h-12 w-12 text-megah-green mx-auto mb-4" />
-              <h3 className="text-xl font-semibold text-white mb-2">Email Us</h3>
+              <h3 className="text-xl font-semibold text-white mb-2">{t('support.emailUs')}</h3>
               <p className="text-white/80 mb-4">megahprince82@gmail.com</p>
               <Button 
                 className="megah-btn-primary"
                 onClick={() => window.location.href = 'mailto:megahprince82@gmail.com'}
               >
-                Send Email
+                {t('support.emailUs')}
               </Button>
             </div>
 
             <div className="megah-glass rounded-xl p-8 text-center">
               <Phone className="h-12 w-12 text-megah-yellow mx-auto mb-4" />
-              <h3 className="text-xl font-semibold text-white mb-2">Call Us</h3>
+              <h3 className="text-xl font-semibold text-white mb-2">{t('support.callUs')}</h3>
               <p className="text-white/80 mb-4">+237 675859441</p>
               <Button 
                 className="megah-btn-primary"
                 onClick={() => window.location.href = 'tel:+237675859441'}
               >
-                Call Now
+                {t('support.callUs')}
               </Button>
             </div>
           </div>

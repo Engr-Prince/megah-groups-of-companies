@@ -2,3 +2,6 @@ project_id = "vgobynwzjafeamxcfahl"
 
 [functions.send-partnership-notification]
 verify_jwt = false
+
+[functions.send-contact-notification]
+verify_jwt = false

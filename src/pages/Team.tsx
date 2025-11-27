@@ -32,7 +32,7 @@ const Team = () => {
       isCeo: true
     },
     {
-      name: "Miss Ndi Queen Onella",
+      name: "Miss NDIP Queen Onella",
       role: "Marketing Lead",
       image: queenPic,
       bio: "Strategic marketing professional driving growth and brand awareness. Specialist in digital marketing and community building.",
@@ -44,7 +44,7 @@ const Team = () => {
       }
     },
     {
-      name: "Miss Angel Precious",
+      name: "Engr. Angel Precious",
       role: "UI/UX Designer",
       image: preciousPic,
       bio: "Creative designer crafting beautiful and intuitive user experiences. Expert in modern design systems and user-centered design.",
@@ -57,7 +57,7 @@ const Team = () => {
       }
     },
     {
-      name: "Mr. Nanje Clophas",
+      name: "Engr. Nanje Clophas",
       role: "Project Manager",
       image: clophasPic,
       bio: "Expert project coordinator ensuring seamless delivery of complex tech solutions. Specializes in agile methodologies and team leadership. Also a skilled Python developer.",
@@ -152,7 +152,7 @@ const Team = () => {
                     <img 
                       src={member.image} 
                       alt={member.name}
-                      className={`w-full h-64 object-cover ${member.name === "Miss Ndi Queen Onella" ? "object-[center_15%]" : member.name === "Miss Angel Precious" ? "object-[center_20%]" : ""}`}
+                      className={`w-full h-64 object-cover ${member.name === "Miss NDIP Queen Onella" ? "object-[center_15%]" : member.name === "Engr. Angel Precious" ? "object-[center_20%]" : ""}`}
                     />
                     <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent"></div>
                     <div className="absolute bottom-4 left-4 text-white">

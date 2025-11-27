@@ -2,8 +2,11 @@ import { Link } from "react-router-dom";
 import { Facebook, Twitter, Instagram, Linkedin, Youtube, ChevronUp } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import megahLogo from "@/assets/megah-logo.png";
+import { useLanguage } from "@/contexts/LanguageContext";
 
 const Footer = () => {
+  const { t } = useLanguage();
+
   const scrollToTop = () => {
     window.scrollTo({ top: 0, behavior: "smooth" });
   };
@@ -22,50 +25,66 @@ const Footer = () => {
               />
             </Link>
             <p className="text-muted-foreground">
-              African tech innovation at its finest. Building the future with cutting-edge solutions.
+              {t('footer.tagline')}
             </p>
             <p className="text-sm font-semibold megah-gradient-text">
-              "Think Big. Grow MEGAH"
+              {t('footer.slogan')}
             </p>
           </div>
 
           {/* Quick Links */}
           <div>
-            <h3 className="font-semibold mb-4">Quick Links</h3>
+            <h3 className="font-semibold mb-4">{t('footer.quickLinks')}</h3>
             <div className="space-y-2">
               <Link to="/about" className="block text-muted-foreground hover:text-foreground transition-colors">
-                About Us
+                {t('footer.aboutUs')}
               </Link>
               <Link to="/services" className="block text-muted-foreground hover:text-foreground transition-colors">
-                Services
+                {t('footer.services')}
               </Link>
               <Link to="/team" className="block text-muted-foreground hover:text-foreground transition-colors">
-                Our Team
+                {t('footer.ourTeam')}
               </Link>
               <Link to="/testimonials" className="block text-muted-foreground hover:text-foreground transition-colors">
-                Testimonials
+                {t('footer.testimonials')}
               </Link>
             </div>
           </div>
 
           {/* Services */}
           <div>
-            <h3 className="font-semibold mb-4">Services</h3>
+            <h3 className="font-semibold mb-4">{t('footer.servicesTitle')}</h3>
             <div className="space-y-2">
-              <p className="text-muted-foreground">Web & App Development</p>
-              <p className="text-muted-foreground">Startup Consulting</p>
-              <p className="text-muted-foreground">Document Processing</p>
-              <p className="text-muted-foreground">MegaConnect Platform</p>
+              <p className="text-muted-foreground">{t('footer.webAppDev')}</p>
+              <p className="text-muted-foreground">{t('footer.startupConsulting')}</p>
+              <p className="text-muted-foreground">{t('footer.documentProcessing')}</p>
+              <p className="text-muted-foreground">{t('footer.megaconnectPlatform')}</p>
             </div>
           </div>
 
           {/* Contact & Social */}
           <div>
-            <h3 className="font-semibold mb-4">Connect</h3>
+            <h3 className="font-semibold mb-4">{t('footer.connect')}</h3>
             <div className="space-y-2 mb-4">
-              <p className="text-muted-foreground">Douala, Cameroon</p>
-              <p className="text-muted-foreground">megahprince82@gmail.com</p>
-              <p className="text-muted-foreground">+237 675859441</p>
+              <p className="text-muted-foreground">{t('footer.location')}</p>
+              <a 
+                href="mailto:megahgroupsofcompanies@gmail.com" 
+                className="block text-muted-foreground hover:text-foreground transition-colors"
+              >
+                {t('footer.emailPrimary')}
+              </a>
+              <a 
+                href="mailto:megahprince82@gmail.com" 
+                className="block text-muted-foreground hover:text-foreground transition-colors"
+              >
+                {t('footer.emailSecondary')}
+              </a>
+              <a 
+                href="tel:+237675859441" 
+                className="block text-muted-foreground hover:text-foreground transition-colors"
+              >
+                {t('footer.phone')}
+              </a>
             </div>
             <div className="flex space-x-3">
               <Button variant="ghost" size="icon" className="hover:text-primary">
@@ -89,14 +108,14 @@ const Footer = () => {
 
         <div className="border-t border-border mt-12 pt-8 flex flex-col sm:flex-row justify-between items-center">
           <p className="text-muted-foreground text-sm">
-            © 2024 MEGAH Group of Companies. All rights reserved.
+            {t('footer.copyright')}
           </p>
           <div className="flex space-x-4 mt-4 sm:mt-0">
             <Link to="/terms" className="text-muted-foreground hover:text-foreground text-sm transition-colors">
-              Terms & Conditions
+              {t('footer.termsConditions')}
             </Link>
             <Link to="/terms" className="text-muted-foreground hover:text-foreground text-sm transition-colors">
-              Privacy Policy
+              {t('footer.privacyPolicy')}
             </Link>
           </div>
         </div>

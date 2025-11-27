@@ -1,7 +1,7 @@
 import Layout from "@/components/Layout";
 import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
-import { Github, Linkedin, Mail, Facebook, Instagram } from "lucide-react";
+import { Github, Linkedin, Mail, Facebook, Instagram, Award, FileCheck, Star, Target } from "lucide-react";
 import { useLanguage } from "@/contexts/LanguageContext";
 import megahCeoPic from "@/assets/megah-ceo.jpg";
 import queenPic from "@/assets/team-queen.jpg";
@@ -211,6 +211,74 @@ const Team = () => {
                 </CardContent>
               </Card>
             ))}
+          </div>
+        </div>
+      </section>
+
+      {/* Achievements & Recognitions Section */}
+      <section className="py-20 px-4 bg-background">
+        <div className="max-w-7xl mx-auto">
+          <div className="text-center mb-16 animate-fade-in">
+            <h2 className="text-4xl md:text-5xl font-bold mb-4 megah-gradient-text">
+              {t('team.achievementsTitle')}
+            </h2>
+            <p className="text-xl text-muted-foreground max-w-3xl mx-auto">
+              {t('team.achievementsSubtitle')}
+            </p>
+          </div>
+
+          <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-8">
+            {/* Projects Delivered */}
+            <Card className="megah-card-hover animate-fade-in" style={{ animationDelay: '0.1s' }}>
+              <CardContent className="p-6">
+                <div className="w-16 h-16 rounded-full bg-gradient-to-br from-megah-primary via-megah-secondary to-megah-accent flex items-center justify-center mb-4 mx-auto">
+                  <Award className="w-8 h-8 text-white" />
+                </div>
+                <h3 className="text-xl font-semibold mb-2 text-center">{t('team.projectsDelivered')}</h3>
+                <p className="text-muted-foreground text-center">
+                  {t('team.projectsDeliveredDesc')}
+                </p>
+              </CardContent>
+            </Card>
+
+            {/* Certified Professionals */}
+            <Card className="megah-card-hover animate-fade-in" style={{ animationDelay: '0.2s' }}>
+              <CardContent className="p-6">
+                <div className="w-16 h-16 rounded-full bg-gradient-to-br from-megah-secondary via-megah-accent to-megah-primary flex items-center justify-center mb-4 mx-auto">
+                  <FileCheck className="w-8 h-8 text-white" />
+                </div>
+                <h3 className="text-xl font-semibold mb-2 text-center">{t('team.certifiedPros')}</h3>
+                <p className="text-muted-foreground text-center">
+                  {t('team.certifiedProsDesc')}
+                </p>
+              </CardContent>
+            </Card>
+
+            {/* Industry Recognition */}
+            <Card className="megah-card-hover animate-fade-in" style={{ animationDelay: '0.3s' }}>
+              <CardContent className="p-6">
+                <div className="w-16 h-16 rounded-full bg-gradient-to-br from-megah-accent via-megah-primary to-megah-secondary flex items-center justify-center mb-4 mx-auto">
+                  <Star className="w-8 h-8 text-white" />
+                </div>
+                <h3 className="text-xl font-semibold mb-2 text-center">{t('team.industryRecognition')}</h3>
+                <p className="text-muted-foreground text-center">
+                  {t('team.industryRecognitionDesc')}
+                </p>
+              </CardContent>
+            </Card>
+
+            {/* Client Satisfaction */}
+            <Card className="megah-card-hover animate-fade-in" style={{ animationDelay: '0.4s' }}>
+              <CardContent className="p-6">
+                <div className="w-16 h-16 rounded-full bg-gradient-to-br from-megah-primary via-megah-accent to-megah-secondary flex items-center justify-center mb-4 mx-auto">
+                  <Target className="w-8 h-8 text-white" />
+                </div>
+                <h3 className="text-xl font-semibold mb-2 text-center">{t('team.clientSatisfaction')}</h3>
+                <p className="text-muted-foreground text-center">
+                  {t('team.clientSatisfactionDesc')}
+                </p>
+              </CardContent>
+            </Card>
           </div>
         </div>
       </section>

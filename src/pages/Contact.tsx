@@ -8,6 +8,7 @@ import { Label } from "@/components/ui/label";
 import { MapPin, Phone, Mail, Clock, Send, Facebook, Twitter, Instagram, Linkedin, Youtube, AlertCircle } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
 import Map from "@/components/Map";
+import { supabase } from "@/integrations/supabase/client";
 import { useLanguage } from "@/contexts/LanguageContext";
 import { 
   sanitizeInput, 
@@ -114,13 +115,8 @@ const Contact = () => {
     setIsSubmitting(true);
     
     try {
-      const response = await fetch("https://api.web3forms.com/submit", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          access_key: "bc39fe5b-e02c-4b05-9b5d-dde9be7c3b39",
+      const { data, error } = await supabase.functions.invoke('send-web3forms', {
+        body: {
           name: `${formData.firstName} ${formData.lastName}`,
           email: formData.email,
           phone: formData.phone || "Not provided",
@@ -131,11 +127,11 @@ const Contact = () => {
           timeline: formData.timeline || "Not specified",
           subject: `New Contact Form Submission: ${formData.service || 'General Inquiry'}`,
           botcheck: "",
-        }),
+        }
       });
 
-      const result = await response.json();
-      if (!result.success) throw new Error(result.message || "Submission failed");
+      if (error) throw error;
+      if (!data?.success) throw new Error(data?.message || "Submission failed");
 
       toast({
         title: "Message Sent Successfully!",

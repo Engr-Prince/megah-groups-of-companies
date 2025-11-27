@@ -6,7 +6,7 @@ import { useLanguage } from "@/contexts/LanguageContext";
 import megahCeoPic from "@/assets/megah-ceo.jpg";
 import queenPic from "@/assets/team-queen.jpg";
 import preciousPic from "@/assets/team-precious.jpg";
-import janePic from "@/assets/team-jane.jpg";
+import clophasPic from "@/assets/team-clophas.jpg";
 
 const Team = () => {
   const { t } = useLanguage();
@@ -57,15 +57,15 @@ const Team = () => {
       }
     },
     {
-      name: "Jane Doe",
+      name: "Mr. Nanje Clophas",
       role: "Project Manager",
-      image: janePic,
-      bio: "Expert project coordinator ensuring seamless delivery of complex tech solutions. Specializes in agile methodologies and team leadership.",
-      specialties: ["Agile/Scrum", "Team Leadership", "Client Relations", "Process Optimization"],
+      image: clophasPic,
+      bio: "Expert project coordinator ensuring seamless delivery of complex tech solutions. Specializes in agile methodologies and team leadership. Also a skilled Python developer.",
+      specialties: ["Agile/Scrum", "Team Leadership", "Python Development", "Process Optimization"],
       social: {
-        github: "#",
-        linkedin: "#",
-        email: "jane@megahgroup.com"
+        facebook: "#",
+        instagram: "#",
+        email: "clophas@megahgroup.com"
       }
     }
   ];

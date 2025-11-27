@@ -2,6 +2,15 @@ import Layout from "@/components/Layout";
 import { Card, CardContent } from "@/components/ui/card";
 import { Star, Quote } from "lucide-react";
 
+// Import testimonial images
+import testimonialSarah from "@/assets/testimonial-sarah.jpg";
+import testimonialDavid from "@/assets/testimonial-david.jpg";
+import testimonialMarie from "@/assets/testimonial-marie.jpg";
+import testimonialJames from "@/assets/testimonial-james.jpg";
+import testimonialAmina from "@/assets/testimonial-amina.jpg";
+import testimonialEmmanuel from "@/assets/testimonial-emmanuel.jpg";
+import testimonialKwame from "@/assets/testimonial-kwame.jpg";
+
 const Testimonials = () => {
   const testimonials = [
     {
@@ -10,7 +19,7 @@ const Testimonials = () => {
       company: "Lagos, Nigeria",
       rating: 5,
       text: "MEGAH transformed our startup vision into reality. Their technical expertise and understanding of the African market made all the difference. We couldn't have asked for better partners.",
-      avatar: "👩🏽‍💼"
+      avatar: testimonialSarah
     },
     {
       name: "David Kone",
@@ -18,7 +27,7 @@ const Testimonials = () => {
       company: "Abidjan, Côte d'Ivoire",
       rating: 5,
       text: "The mentorship program at MEGAH gave us the strategic guidance we needed. From business model validation to technical architecture, they supported us every step of the way.",
-      avatar: "👨🏿‍💻"
+      avatar: testimonialDavid
     },
     {
       name: "Marie Nguema",
@@ -26,7 +35,7 @@ const Testimonials = () => {
       company: "Libreville, Gabon",
       rating: 5,
       text: "Their document processing service made my visa application seamless. Professional, efficient, and reliable. MEGAH truly understands the needs of African professionals.",
-      avatar: "👩🏾‍💼"
+      avatar: testimonialMarie
     },
     {
       name: "James Ochieng",
@@ -34,7 +43,7 @@ const Testimonials = () => {
       company: "Nairobi, Kenya",
       rating: 5,
       text: "I found my dream job through MegaConnect! The platform's focus on African talent and global opportunities is exactly what our continent needs. Highly recommended!",
-      avatar: "👨🏿‍💻"
+      avatar: testimonialJames
     },
     {
       name: "Amina Hassan",
@@ -42,7 +51,7 @@ const Testimonials = () => {
       company: "Dakar, Senegal",
       rating: 5,
       text: "MEGAH's web development team created a stunning platform for our e-commerce business. Their attention to detail and commitment to excellence exceeded our expectations.",
-      avatar: "👩🏽‍💼"
+      avatar: testimonialAmina
     },
     {
       name: "Emmanuel Togo",
@@ -50,7 +59,7 @@ const Testimonials = () => {
       company: "Douala, Cameroon",
       rating: 5,
       text: "Working with MEGAH has been transformative for our consultancy. Their technical solutions and local market knowledge helped us scale across three countries.",
-      avatar: "👨🏾‍💼"
+      avatar: testimonialEmmanuel
     }
   ];
 
@@ -80,9 +89,11 @@ const Testimonials = () => {
                   </div>
                   
                   <div className="flex items-center mb-4">
-                    <div className="w-12 h-12 bg-gradient-primary rounded-full flex items-center justify-center text-2xl mr-4">
-                      {testimonial.avatar}
-                    </div>
+                    <img 
+                      src={testimonial.avatar} 
+                      alt={testimonial.name}
+                      className="w-12 h-12 rounded-full object-cover mr-4 ring-2 ring-primary/30"
+                    />
                     <div>
                       <h3 className="font-semibold text-lg">{testimonial.name}</h3>
                       <p className="text-sm text-muted-foreground">{testimonial.role}</p>
@@ -146,9 +157,11 @@ const Testimonials = () => {
               "MEGAH doesn't just deliver projects; they deliver dreams. Their deep understanding of African markets combined with world-class technical expertise makes them the perfect partner for any ambitious venture."
             </blockquote>
             <div className="flex items-center justify-center space-x-4">
-              <div className="w-16 h-16 bg-gradient-accent rounded-full flex items-center justify-center text-3xl">
-                👨🏿‍💼
-              </div>
+              <img 
+                src={testimonialKwame} 
+                alt="Dr. Kwame Asante"
+                className="w-16 h-16 rounded-full object-cover ring-2 ring-megah-yellow/50"
+              />
               <div className="text-left">
                 <div className="text-white font-semibold text-lg">Dr. Kwame Asante</div>
                 <div className="text-white/80">Director, African Innovation Hub</div>

@@ -9,6 +9,7 @@ import { MapPin, Phone, Mail, Clock, Send, Facebook, Twitter, Instagram, Linkedi
 import { useToast } from "@/hooks/use-toast";
 import Map from "@/components/Map";
 import { supabase } from "@/integrations/supabase/client";
+import { useLanguage } from "@/contexts/LanguageContext";
 import { 
   sanitizeInput, 
   validateEmail, 
@@ -20,6 +21,7 @@ import {
 
 const Contact = () => {
   const { toast } = useToast();
+  const { t } = useLanguage();
   const [formData, setFormData] = useState({
     firstName: '',
     lastName: '',
@@ -165,10 +167,10 @@ const Contact = () => {
       <section className="py-20 megah-hero-bg">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
           <h1 className="text-5xl md:text-6xl font-bold text-white mb-6 animate-slide-up">
-            Contact <span className="megah-gradient-text bg-gradient-to-r from-megah-yellow to-megah-green bg-clip-text text-transparent">Us</span>
+            {t('contact.heroTitle')} <span className="megah-gradient-text bg-gradient-to-r from-megah-yellow to-megah-green bg-clip-text text-transparent">{t('contact.heroHighlight')}</span>
           </h1>
           <p className="text-xl text-white/80 max-w-3xl mx-auto">
-            Ready to transform your ideas into reality? Let's start the conversation today.
+            {t('contact.heroSubtitle')}
           </p>
         </div>
       </section>
@@ -182,16 +184,16 @@ const Contact = () => {
             <div className="lg:col-span-2">
               <Card className="border-2 border-primary/20">
                 <CardHeader>
-                  <CardTitle className="text-3xl megah-gradient-text">Send Us a Message</CardTitle>
+                  <CardTitle className="text-3xl megah-gradient-text">{t('contact.sendMessage')}</CardTitle>
                   <p className="text-muted-foreground">
-                    Fill out the form below and we'll get back to you within 24 hours.
+                    {t('contact.formDesc')}
                   </p>
                 </CardHeader>
                 <CardContent>
                   <form onSubmit={handleSubmit} className="space-y-6">
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                       <div>
-                        <Label htmlFor="firstName">First Name *</Label>
+                        <Label htmlFor="firstName">{t('contact.firstName')} *</Label>
                         <Input 
                           id="firstName" 
                           placeholder="John" 
@@ -209,7 +211,7 @@ const Contact = () => {
                         )}
                       </div>
                       <div>
-                        <Label htmlFor="lastName">Last Name *</Label>
+                        <Label htmlFor="lastName">{t('contact.lastName')} *</Label>
                         <Input 
                           id="lastName" 
                           placeholder="Doe" 
@@ -230,7 +232,7 @@ const Contact = () => {
                     
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                       <div>
-                        <Label htmlFor="email">Email Address *</Label>
+                        <Label htmlFor="email">{t('contact.email')} *</Label>
                         <Input 
                           id="email" 
                           type="email" 
@@ -249,7 +251,7 @@ const Contact = () => {
                         )}
                       </div>
                       <div>
-                        <Label htmlFor="phone">Phone Number</Label>
+                        <Label htmlFor="phone">{t('contact.phone')}</Label>
                         <Input 
                           id="phone" 
                           placeholder="+237 XXX XXX XXX" 
@@ -269,7 +271,7 @@ const Contact = () => {
                     
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                       <div>
-                        <Label htmlFor="company">Company/Organization</Label>
+                        <Label htmlFor="company">{t('contact.company')}</Label>
                         <Input 
                           id="company" 
                           placeholder="Your company name" 
@@ -280,44 +282,44 @@ const Contact = () => {
                         />
                       </div>
                       <div>
-                        <Label htmlFor="service">Service Interest</Label>
+                        <Label htmlFor="service">{t('contact.service')}</Label>
                         <select 
                           className="w-full mt-1 px-3 py-2 border border-input rounded-md bg-background"
                           value={formData.service}
                           onChange={(e) => handleInputChange('service', e.target.value)}
                         >
-                          <option value="">Select a service</option>
-                          <option value="web-development">Web & App Development</option>
-                          <option value="startup-consulting">Startup Consulting</option>
-                          <option value="document-processing">Document Processing</option>
-                          <option value="megaconnect">MegaConnect Platform</option>
-                          <option value="other">Other</option>
+                          <option value="">{t('contact.selectService')}</option>
+                          <option value="web-development">{t('contact.webDevelopment')}</option>
+                          <option value="startup-consulting">{t('contact.startupConsulting')}</option>
+                          <option value="document-processing">{t('contact.documentProcessing')}</option>
+                          <option value="megaconnect">{t('contact.megaconnect')}</option>
+                          <option value="other">{t('contact.other')}</option>
                         </select>
                       </div>
                     </div>
                     
                     <div>
-                      <Label htmlFor="budget">Project Budget Range</Label>
+                      <Label htmlFor="budget">{t('contact.budget')}</Label>
                       <select 
                         className="w-full mt-1 px-3 py-2 border border-input rounded-md bg-background"
                         value={formData.budget}
                         onChange={(e) => handleInputChange('budget', e.target.value)}
                       >
-                        <option value="">Select budget range</option>
-                        <option value="under-1k">Under $1,000</option>
-                        <option value="1k-5k">$1,000 - $5,000</option>
-                        <option value="5k-10k">$5,000 - $10,000</option>
-                        <option value="10k-25k">$10,000 - $25,000</option>
-                        <option value="25k-plus">$25,000+</option>
-                        <option value="discuss">Prefer to discuss</option>
+                        <option value="">{t('contact.selectBudget')}</option>
+                        <option value="under-1k">{t('contact.under1k')}</option>
+                        <option value="1k-5k">{t('contact.budget1k5k')}</option>
+                        <option value="5k-10k">{t('contact.budget5k10k')}</option>
+                        <option value="10k-25k">{t('contact.budget10k25k')}</option>
+                        <option value="25k-plus">{t('contact.budget25kPlus')}</option>
+                        <option value="discuss">{t('contact.discuss')}</option>
                       </select>
                     </div>
                     
                     <div>
-                      <Label htmlFor="message">Project Details *</Label>
+                      <Label htmlFor="message">{t('contact.message')} *</Label>
                       <Textarea 
                         id="message" 
-                        placeholder="Tell us about your project, goals, timeline, and any specific requirements..."
+                        placeholder={t('contact.messagePlaceholder')}
                         className={`mt-1 min-h-[150px] ${formErrors.message ? 'border-destructive' : ''}`}
                         value={formData.message}
                         onChange={(e) => handleInputChange('message', e.target.value)}
@@ -338,18 +340,18 @@ const Contact = () => {
                     </div>
                     
                     <div>
-                      <Label htmlFor="timeline">Preferred Timeline</Label>
+                      <Label htmlFor="timeline">{t('contact.timeline')}</Label>
                       <select 
                         className="w-full mt-1 px-3 py-2 border border-input rounded-md bg-background"
                         value={formData.timeline}
                         onChange={(e) => handleInputChange('timeline', e.target.value)}
                       >
-                        <option value="">Select timeline</option>
-                        <option value="asap">ASAP</option>
-                        <option value="1-month">Within 1 month</option>
-                        <option value="2-3-months">2-3 months</option>
-                        <option value="6-months">Within 6 months</option>
-                        <option value="flexible">Flexible</option>
+                        <option value="">{t('contact.selectTimeline')}</option>
+                        <option value="asap">{t('contact.asap')}</option>
+                        <option value="1-month">{t('contact.oneMonth')}</option>
+                        <option value="2-3-months">{t('contact.twoThree')}</option>
+                        <option value="6-months">{t('contact.sixMonths')}</option>
+                        <option value="flexible">{t('contact.flexible')}</option>
                       </select>
                     </div>
                     
@@ -358,7 +360,7 @@ const Contact = () => {
                       className="w-full megah-btn-primary py-3 text-lg"
                       disabled={isSubmitting}
                     >
-                      {isSubmitting ? 'Sending...' : 'Send Message'} 
+                      {isSubmitting ? t('contact.sending') : t('contact.sendBtn')} 
                       <Send className="ml-2 h-5 w-5" />
                     </Button>
                   </form>
@@ -377,11 +379,11 @@ const Contact = () => {
                       <MapPin className="h-6 w-6 text-white" />
                     </div>
                     <div>
-                      <h3 className="text-lg font-semibold mb-2">Office Location</h3>
+                      <h3 className="text-lg font-semibold mb-2">{t('contact.officeLocation')}</h3>
                       <p className="text-muted-foreground">
-                        MEGAH Group of Companies<br />
-                        Douala, Cameroon<br />
-                        Central Africa
+                        {t('contact.officeAddress')}<br />
+                        {t('contact.city')}<br />
+                        {t('contact.region')}
                       </p>
                     </div>
                   </div>
@@ -396,7 +398,7 @@ const Contact = () => {
                       <Phone className="h-6 w-6 text-white" />
                     </div>
                     <div>
-                      <h3 className="text-lg font-semibold mb-2">Phone</h3>
+                      <h3 className="text-lg font-semibold mb-2">{t('contact.phone')}</h3>
                       <p className="text-muted-foreground">
                         +237 675859441<br />
                         +237 675859441 (WhatsApp)
@@ -414,7 +416,7 @@ const Contact = () => {
                       <Mail className="h-6 w-6 text-white" />
                     </div>
                     <div>
-                      <h3 className="text-lg font-semibold mb-2">Email</h3>
+                      <h3 className="text-lg font-semibold mb-2">{t('contact.email')}</h3>
                       <p className="text-muted-foreground">
                         megahprince82@gmail.com<br />
                         megahprince82@gmail.com
@@ -432,12 +434,12 @@ const Contact = () => {
                       <Clock className="h-6 w-6 text-white" />
                     </div>
                     <div>
-                      <h3 className="text-lg font-semibold mb-2">Business Hours</h3>
+                      <h3 className="text-lg font-semibold mb-2">{t('contact.businessHours')}</h3>
                       <div className="text-muted-foreground space-y-1">
-                        <p>Monday - Friday: 8:00 AM - 6:00 PM</p>
-                        <p>Saturday: 9:00 AM - 2:00 PM</p>
-                        <p>Sunday: Closed</p>
-                        <p className="text-sm text-primary">*Emergency support available 24/7</p>
+                        <p>{t('contact.monday')}</p>
+                        <p>{t('contact.saturday')}</p>
+                        <p>{t('contact.sunday')}</p>
+                        <p className="text-sm text-primary">{t('contact.emergency')}</p>
                       </div>
                     </div>
                   </div>
@@ -447,7 +449,7 @@ const Contact = () => {
               {/* Social Media */}
               <Card className="megah-card-hover border-2 border-megah-yellow/20">
                 <CardContent className="p-6">
-                  <h3 className="text-lg font-semibold mb-4">Follow Us</h3>
+                  <h3 className="text-lg font-semibold mb-4">{t('contact.socialMedia')}</h3>
                   <div className="flex space-x-3">
                     <Button variant="ghost" size="icon" className="hover:text-primary">
                       <Facebook className="h-5 w-5" />
@@ -476,9 +478,9 @@ const Contact = () => {
       <section className="py-20 bg-card">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-12">
-            <h2 className="text-4xl font-bold mb-6 megah-gradient-text">Find Us</h2>
+            <h2 className="text-4xl font-bold mb-6 megah-gradient-text">{t('contact.mapTitle')}</h2>
             <p className="text-xl text-muted-foreground">
-              Located in the heart of Douala, Cameroon's economic capital
+              {t('contact.mapDesc')}
             </p>
           </div>
           
@@ -491,12 +493,12 @@ const Contact = () => {
       {/* CTA Section */}
       <section className="py-20 megah-hero-bg">
         <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
-          <h2 className="text-4xl font-bold text-white mb-6">Ready to Start Your Project?</h2>
+          <h2 className="text-4xl font-bold text-white mb-6">{t('contact.ctaTitle')}</h2>
           <p className="text-xl text-white/80 mb-8">
-            Join the hundreds of successful businesses that trust MEGAH with their technology needs.
+            {t('contact.ctaDesc')}
           </p>
           <Button className="megah-btn-primary px-12 py-4 text-lg">
-            Schedule Free Consultation
+            {t('contact.ctaBtn')}
           </Button>
         </div>
       </section>

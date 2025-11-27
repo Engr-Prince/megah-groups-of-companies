@@ -18,7 +18,7 @@ const Footer = () => {
               <img 
                 src={megahLogo} 
                 alt="MEGAH Group of Companies" 
-                className="h-12 w-auto"
+                className="h-16 w-auto"
               />
             </Link>
             <p className="text-muted-foreground">

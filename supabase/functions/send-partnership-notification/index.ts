@@ -1,6 +1,7 @@
 import { serve } from "https://deno.land/std@0.190.0/http/server.ts";
 import { Resend } from "npm:resend@2.0.0";
 import { createClient } from "https://esm.sh/@supabase/supabase-js@2";
+import { z } from "npm:zod@3.23.8";
 
 const resend = new Resend(Deno.env.get("RESEND_API_KEY"));
 
@@ -15,13 +16,28 @@ const corsHeaders = {
     "authorization, x-client-info, apikey, content-type",
 };
 
-interface PartnershipNotification {
-  name: string;
-  email: string;
-  organization?: string;
-  supportType: string;
-  message: string;
-}
+// Input validation schema
+const partnershipSchema = z.object({
+  name: z.string().trim().min(2, "Name must be at least 2 characters").max(100, "Name too long"),
+  email: z.string().trim().email("Invalid email address").max(255, "Email too long"),
+  organization: z.string().max(200, "Organization name too long").optional().nullable(),
+  supportType: z.string().min(1, "Support type is required").max(100, "Support type too long"),
+  message: z.string().trim().min(10, "Message must be at least 10 characters").max(2000, "Message too long"),
+});
+
+type PartnershipNotification = z.infer<typeof partnershipSchema>;
+
+// HTML escape function to prevent XSS in emails
+const escapeHtml = (text: string): string => {
+  const map: Record<string, string> = {
+    '&': '&amp;',
+    '<': '&lt;',
+    '>': '&gt;',
+    '"': '&quot;',
+    "'": '&#039;'
+  };
+  return text.replace(/[&<>"']/g, char => map[char]);
+};
 
 const handler = async (req: Request): Promise<Response> => {
   // Handle CORS preflight requests
@@ -30,19 +46,59 @@ const handler = async (req: Request): Promise<Response> => {
   }
 
   try {
-    const { name, email, organization, supportType, message }: PartnershipNotification = await req.json();
+    // Parse and validate input
+    const rawData = await req.json();
+    const parseResult = partnershipSchema.safeParse(rawData);
+    
+    if (!parseResult.success) {
+      console.error("Validation error:", parseResult.error.flatten());
+      return new Response(
+        JSON.stringify({ 
+          success: false,
+          error: "Invalid input", 
+          details: parseResult.error.flatten().fieldErrors 
+        }),
+        {
+          status: 400,
+          headers: { "Content-Type": "application/json", ...corsHeaders },
+        }
+      );
+    }
+    
+    const partnershipData: PartnershipNotification = parseResult.data;
+    console.log("Processing partnership inquiry for:", partnershipData.email);
 
-    console.log("Processing partnership inquiry for:", email);
+    // Rate limiting: Check recent submissions from this email
+    const oneMinuteAgo = new Date(Date.now() - 60000).toISOString();
+    const { count: recentCount } = await supabaseAdmin
+      .from("partnership_inquiries")
+      .select("*", { count: "exact", head: true })
+      .eq("email", partnershipData.email)
+      .gte("created_at", oneMinuteAgo);
 
-    // First, save to database
+    if (recentCount && recentCount >= 3) {
+      console.warn(`Rate limit exceeded for email: ${partnershipData.email}`);
+      return new Response(
+        JSON.stringify({ 
+          success: false,
+          error: "Too many requests. Please try again later." 
+        }),
+        {
+          status: 429,
+          headers: { "Content-Type": "application/json", ...corsHeaders },
+        }
+      );
+    }
+
+    // Save to database
     const { data: dbData, error: dbError } = await supabaseAdmin
       .from('partnership_inquiries')
       .insert([{
-        name,
-        email,
-        organization,
-        support_type: supportType,
-        message,
+        name: partnershipData.name,
+        email: partnershipData.email,
+        organization: partnershipData.organization || null,
+        support_type: partnershipData.supportType,
+        message: partnershipData.message,
         status: 'new'
       }])
       .select()
@@ -55,11 +111,18 @@ const handler = async (req: Request): Promise<Response> => {
 
     console.log("Inquiry saved to database:", dbData.id);
 
+    // Escape user input for safe HTML rendering in emails
+    const safeName = escapeHtml(partnershipData.name);
+    const safeEmail = escapeHtml(partnershipData.email);
+    const safeOrganization = partnershipData.organization ? escapeHtml(partnershipData.organization) : null;
+    const safeSupportType = escapeHtml(partnershipData.supportType);
+    const safeMessage = escapeHtml(partnershipData.message);
+
     // Send notification email to admin
     const adminEmailResponse = await resend.emails.send({
       from: "MEGAH Partnerships <onboarding@resend.dev>",
       to: ["megahprince82@gmail.com"],
-      subject: `New Partnership Inquiry from ${name}`,
+      subject: `New Partnership Inquiry from ${safeName}`,
       html: `
         <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto;">
           <h2 style="color: #333; border-bottom: 3px solid #4CAF50; padding-bottom: 10px;">
@@ -68,15 +131,15 @@ const handler = async (req: Request): Promise<Response> => {
           
           <div style="background-color: #f9f9f9; padding: 20px; border-radius: 8px; margin: 20px 0;">
             <h3 style="color: #4CAF50; margin-top: 0;">Contact Information</h3>
-            <p><strong>Name:</strong> ${name}</p>
-            <p><strong>Email:</strong> <a href="mailto:${email}">${email}</a></p>
-            ${organization ? `<p><strong>Organization:</strong> ${organization}</p>` : ""}
-            <p><strong>Support Type:</strong> ${supportType}</p>
+            <p><strong>Name:</strong> ${safeName}</p>
+            <p><strong>Email:</strong> <a href="mailto:${safeEmail}">${safeEmail}</a></p>
+            ${safeOrganization ? `<p><strong>Organization:</strong> ${safeOrganization}</p>` : ""}
+            <p><strong>Support Type:</strong> ${safeSupportType}</p>
           </div>
           
           <div style="background-color: #fff; padding: 20px; border-left: 4px solid #4CAF50; margin: 20px 0;">
             <h3 style="color: #333; margin-top: 0;">Message</h3>
-            <p style="white-space: pre-wrap; line-height: 1.6;">${message}</p>
+            <p style="white-space: pre-wrap; line-height: 1.6;">${safeMessage}</p>
           </div>
           
           <div style="background-color: #f0f0f0; padding: 15px; border-radius: 8px; margin-top: 20px;">
@@ -93,19 +156,19 @@ const handler = async (req: Request): Promise<Response> => {
     // Send auto-reply confirmation email to submitter
     const autoReplyResponse = await resend.emails.send({
       from: "MEGAH <onboarding@resend.dev>",
-      to: [email],
+      to: [partnershipData.email],
       subject: "Thank you for contacting MEGAH!",
       html: `
         <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto;">
           <h1 style="color: #4CAF50;">Thank you for reaching out to MEGAH!</h1>
-          <p>Dear ${name},</p>
+          <p>Dear ${safeName},</p>
           <p>We've received your partnership inquiry and our team will review it shortly.</p>
           
           <div style="background-color: #f9f9f9; padding: 20px; border-radius: 8px; margin: 20px 0;">
             <h2 style="color: #4CAF50; margin-top: 0;">Here's what you submitted:</h2>
             <ul style="line-height: 1.8;">
-              <li><strong>Support Type:</strong> ${supportType}</li>
-              ${organization ? `<li><strong>Organization:</strong> ${organization}</li>` : ""}
+              <li><strong>Support Type:</strong> ${safeSupportType}</li>
+              ${safeOrganization ? `<li><strong>Organization:</strong> ${safeOrganization}</li>` : ""}
             </ul>
           </div>
           
@@ -143,7 +206,10 @@ const handler = async (req: Request): Promise<Response> => {
   } catch (error: any) {
     console.error("Error in send-partnership-notification function:", error);
     return new Response(
-      JSON.stringify({ error: error.message }),
+      JSON.stringify({ 
+        success: false,
+        error: "Failed to process partnership inquiry" 
+      }),
       {
         status: 500,
         headers: { "Content-Type": "application/json", ...corsHeaders },

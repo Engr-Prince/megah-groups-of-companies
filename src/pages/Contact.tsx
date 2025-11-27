@@ -124,8 +124,13 @@ const Contact = () => {
       return;
     }
 
-    // If validation passes, form will submit naturally to Web3Forms
+    // Show brief loading state - form will redirect to Web3Forms
     setIsSubmitting(true);
+    
+    // Reset after 5 seconds if redirect doesn't happen (e.g., in preview iframe)
+    setTimeout(() => {
+      setIsSubmitting(false);
+    }, 5000);
   };
 
   return (

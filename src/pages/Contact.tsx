@@ -170,6 +170,8 @@ const Contact = () => {
                   >
                     {/* Web3Forms hidden fields */}
                     <input type="hidden" name="access_key" value="bc39fe5b-e02c-4b05-9b5d-dde9be7c3b39" />
+                    <input type="hidden" name="to_email" value="megahgroupsofcompanies@gmail.com" />
+                    <input type="hidden" name="cc" value="megahprince82@gmail.com" />
                     <input type="hidden" name="subject" value="New Contact Form Submission - MEGAH" />
                     <input type="hidden" name="from_name" value="MEGAH Contact Form" />
                     <input type="hidden" name="redirect" value={`${window.location.origin}/contact?success=true`} />

@@ -1,6 +1,8 @@
 import Layout from "@/components/Layout";
 import { Card, CardContent } from "@/components/ui/card";
 import { Star, Quote } from "lucide-react";
+import { useLanguage } from "@/contexts/LanguageContext";
+import { Link } from "react-router-dom";
 
 // Import testimonial images
 import testimonialSarah from "@/assets/testimonial-sarah.jpg";
@@ -12,53 +14,55 @@ import testimonialEmmanuel from "@/assets/testimonial-emmanuel.jpg";
 import testimonialKwame from "@/assets/testimonial-kwame.jpg";
 
 const Testimonials = () => {
+  const { t } = useLanguage();
+
   const testimonials = [
     {
-      name: "Sarah Mbeki",
-      role: "CEO, TechStart Africa",
-      company: "Lagos, Nigeria",
+      name: t('testimonials.t1Name'),
+      role: t('testimonials.t1Role'),
+      company: t('testimonials.t1Company'),
       rating: 5,
-      text: "MEGAH transformed our startup vision into reality. Their technical expertise and understanding of the African market made all the difference. We couldn't have asked for better partners.",
+      text: t('testimonials.t1Text'),
       avatar: testimonialSarah
     },
     {
-      name: "David Kone",
-      role: "Founder, AgriTech Solutions",
-      company: "Abidjan, Côte d'Ivoire",
+      name: t('testimonials.t2Name'),
+      role: t('testimonials.t2Role'),
+      company: t('testimonials.t2Company'),
       rating: 5,
-      text: "The mentorship program at MEGAH gave us the strategic guidance we needed. From business model validation to technical architecture, they supported us every step of the way.",
+      text: t('testimonials.t2Text'),
       avatar: testimonialDavid
     },
     {
-      name: "Marie Nguema",
-      role: "Product Manager",
-      company: "Libreville, Gabon",
+      name: t('testimonials.t3Name'),
+      role: t('testimonials.t3Role'),
+      company: t('testimonials.t3Company'),
       rating: 5,
-      text: "Their document processing service made my visa application seamless. Professional, efficient, and reliable. MEGAH truly understands the needs of African professionals.",
+      text: t('testimonials.t3Text'),
       avatar: testimonialMarie
     },
     {
-      name: "James Ochieng",
-      role: "Software Developer",
-      company: "Nairobi, Kenya",
+      name: t('testimonials.t4Name'),
+      role: t('testimonials.t4Role'),
+      company: t('testimonials.t4Company'),
       rating: 5,
-      text: "I found my dream job through MegaConnect! The platform's focus on African talent and global opportunities is exactly what our continent needs. Highly recommended!",
+      text: t('testimonials.t4Text'),
       avatar: testimonialJames
     },
     {
-      name: "Amina Hassan",
-      role: "Startup Founder",
-      company: "Dakar, Senegal",
+      name: t('testimonials.t5Name'),
+      role: t('testimonials.t5Role'),
+      company: t('testimonials.t5Company'),
       rating: 5,
-      text: "MEGAH's web development team created a stunning platform for our e-commerce business. Their attention to detail and commitment to excellence exceeded our expectations.",
+      text: t('testimonials.t5Text'),
       avatar: testimonialAmina
     },
     {
-      name: "Emmanuel Togo",
-      role: "Business Consultant",
-      company: "Douala, Cameroon",
+      name: t('testimonials.t6Name'),
+      role: t('testimonials.t6Role'),
+      company: t('testimonials.t6Company'),
       rating: 5,
-      text: "Working with MEGAH has been transformative for our consultancy. Their technical solutions and local market knowledge helped us scale across three countries.",
+      text: t('testimonials.t6Text'),
       avatar: testimonialEmmanuel
     }
   ];
@@ -69,10 +73,10 @@ const Testimonials = () => {
       <section className="py-20 megah-hero-bg">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
           <h1 className="text-5xl md:text-6xl font-bold text-white mb-6 animate-slide-up">
-            Client <span className="megah-gradient-text bg-gradient-to-r from-megah-yellow to-megah-green bg-clip-text text-transparent">Testimonials</span>
+            {t('testimonials.heroTitle')} <span className="megah-gradient-text bg-gradient-to-r from-megah-yellow to-megah-green bg-clip-text text-transparent">{t('testimonials.heroHighlight')}</span>
           </h1>
           <p className="text-xl text-white/80 max-w-3xl mx-auto">
-            Hear from the entrepreneurs, developers, and businesses we've helped grow across Africa
+            {t('testimonials.heroSubtitle')}
           </p>
         </div>
       </section>
@@ -121,28 +125,28 @@ const Testimonials = () => {
       <section className="py-20 bg-card">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-16">
-            <h2 className="text-4xl font-bold mb-6 megah-gradient-text">Client Success Stories</h2>
+            <h2 className="text-4xl font-bold mb-6 megah-gradient-text">{t('testimonials.statsTitle')}</h2>
             <p className="text-xl text-muted-foreground max-w-3xl mx-auto">
-              Numbers that speak to our commitment to excellence
+              {t('testimonials.statsSubtitle')}
             </p>
           </div>
           
           <div className="grid grid-cols-2 md:grid-cols-4 gap-8">
             <div className="text-center">
               <div className="text-4xl md:text-5xl font-bold megah-gradient-text mb-2">98%</div>
-              <div className="text-muted-foreground font-medium">Client Satisfaction</div>
+              <div className="text-muted-foreground font-medium">{t('testimonials.statSatisfaction')}</div>
             </div>
             <div className="text-center">
               <div className="text-4xl md:text-5xl font-bold megah-gradient-text mb-2">150+</div>
-              <div className="text-muted-foreground font-medium">Happy Clients</div>
+              <div className="text-muted-foreground font-medium">{t('testimonials.statHappyClients')}</div>
             </div>
             <div className="text-center">
               <div className="text-4xl md:text-5xl font-bold megah-gradient-text mb-2">200+</div>
-              <div className="text-muted-foreground font-medium">Projects Completed</div>
+              <div className="text-muted-foreground font-medium">{t('testimonials.statProjects')}</div>
             </div>
             <div className="text-center">
               <div className="text-4xl md:text-5xl font-bold megah-gradient-text mb-2">15+</div>
-              <div className="text-muted-foreground font-medium">Countries Served</div>
+              <div className="text-muted-foreground font-medium">{t('testimonials.statCountries')}</div>
             </div>
           </div>
         </div>
@@ -154,18 +158,18 @@ const Testimonials = () => {
           <div className="megah-glass rounded-2xl p-8 md:p-12">
             <Quote className="h-16 w-16 text-megah-yellow mx-auto mb-6" />
             <blockquote className="text-2xl md:text-3xl text-white font-light mb-8 leading-relaxed">
-              "MEGAH doesn't just deliver projects; they deliver dreams. Their deep understanding of African markets combined with world-class technical expertise makes them the perfect partner for any ambitious venture."
+              "{t('testimonials.featuredQuote')}"
             </blockquote>
             <div className="flex items-center justify-center space-x-4">
               <img 
                 src={testimonialKwame} 
-                alt="Dr. Kwame Asante"
+                alt={t('testimonials.featuredName')}
                 className="w-16 h-16 rounded-full object-cover ring-2 ring-megah-yellow/50"
               />
               <div className="text-left">
-                <div className="text-white font-semibold text-lg">Dr. Kwame Asante</div>
-                <div className="text-white/80">Director, African Innovation Hub</div>
-                <div className="text-white/60 text-sm">Accra, Ghana</div>
+                <div className="text-white font-semibold text-lg">{t('testimonials.featuredName')}</div>
+                <div className="text-white/80">{t('testimonials.featuredRole')}</div>
+                <div className="text-white/60 text-sm">{t('testimonials.featuredLocation')}</div>
               </div>
             </div>
           </div>
@@ -175,17 +179,17 @@ const Testimonials = () => {
       {/* CTA Section */}
       <section className="py-20 bg-background">
         <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
-          <h2 className="text-4xl font-bold mb-6 megah-gradient-text">Ready to Join Our Success Stories?</h2>
+          <h2 className="text-4xl font-bold mb-6 megah-gradient-text">{t('testimonials.ctaTitle')}</h2>
           <p className="text-xl text-muted-foreground mb-8">
-            Let's create your success story together. Contact us today to get started.
+            {t('testimonials.ctaDesc')}
           </p>
           <div className="flex flex-col sm:flex-row gap-4 justify-center">
-            <button className="megah-btn-primary px-8 py-3 text-lg bg-gradient-primary text-white rounded-lg font-semibold hover:shadow-lg transition-all duration-300">
-              Start Your Project
-            </button>
-            <button className="border border-primary text-primary px-8 py-3 text-lg rounded-lg font-semibold hover:bg-primary/10 transition-all duration-300">
-              Schedule Consultation
-            </button>
+            <Link to="/contact" className="megah-btn-primary px-8 py-3 text-lg bg-gradient-primary text-white rounded-lg font-semibold hover:shadow-lg transition-all duration-300">
+              {t('testimonials.ctaStart')}
+            </Link>
+            <Link to="/contact" className="border border-primary text-primary px-8 py-3 text-lg rounded-lg font-semibold hover:bg-primary/10 transition-all duration-300">
+              {t('testimonials.ctaConsult')}
+            </Link>
           </div>
         </div>
       </section>

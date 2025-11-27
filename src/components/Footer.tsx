@@ -1,6 +1,7 @@
 import { Link } from "react-router-dom";
 import { Facebook, Twitter, Instagram, Linkedin, Youtube, ChevronUp } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import megahLogo from "@/assets/megah-logo.png";
 
 const Footer = () => {
   const scrollToTop = () => {
@@ -13,12 +14,13 @@ const Footer = () => {
         <div className="grid grid-cols-1 md:grid-cols-4 gap-8">
           {/* Company Info */}
           <div className="space-y-4">
-            <div className="flex items-center space-x-2">
-              <div className="w-8 h-8 bg-gradient-primary rounded-lg flex items-center justify-center">
-                <span className="text-white font-bold text-lg">M</span>
-              </div>
-              <span className="text-xl font-bold megah-gradient-text">MEGAH</span>
-            </div>
+            <Link to="/" className="inline-block">
+              <img 
+                src={megahLogo} 
+                alt="MEGAH Group of Companies" 
+                className="h-12 w-auto"
+              />
+            </Link>
             <p className="text-muted-foreground">
               African tech innovation at its finest. Building the future with cutting-edge solutions.
             </p>

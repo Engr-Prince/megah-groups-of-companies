@@ -20,7 +20,7 @@ const FAQ = () => {
         },
         {
           question: "How can I contact MEGAH for my project?",
-          answer: "You can reach us through our contact page, email us at info@megahgroup.com, call us at +237 XXX XXX XXX, or visit our office in Douala. We offer free initial consultations to discuss your project needs."
+          answer: "You can reach us through our contact page, email us at megahgroupsofcompanies@gmail.com, call us at +237 675859441, or visit our office in Douala. We offer free initial consultations to discuss your project needs."
         }
       ]
     },

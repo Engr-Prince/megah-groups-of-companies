@@ -419,8 +419,8 @@ const Contact = () => {
                     <div>
                       <h3 className="text-lg font-semibold mb-2">{t('contact.email')}</h3>
                       <p className="text-muted-foreground">
-                        info@megahconsult.com<br />
-                        support@megahconsult.com
+                        megahgroupsofcompanies@gmail.com<br />
+                        megahprince82@gmail.com
                       </p>
                     </div>
                   </div>
@@ -504,7 +504,7 @@ const Contact = () => {
                 <Phone className="mr-2 h-5 w-5" /> {t('contact.callNow')}
               </Button>
             </a>
-            <a href="mailto:info@megahconsult.com">
+            <a href="mailto:megahgroupsofcompanies@gmail.com">
               <Button size="lg" variant="outline" className="border-white text-white hover:bg-white/10 px-8 py-4 text-lg">
                 <Mail className="mr-2 h-5 w-5" /> {t('contact.emailUs')}
               </Button>

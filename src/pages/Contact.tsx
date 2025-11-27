@@ -8,6 +8,7 @@ import { Label } from "@/components/ui/label";
 import { MapPin, Phone, Mail, Clock, Send, Facebook, Twitter, Instagram, Linkedin, Youtube, AlertCircle } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
 import Map from "@/components/Map";
+import { supabase } from "@/integrations/supabase/client";
 import { 
   sanitizeInput, 
   validateEmail, 
@@ -79,7 +80,7 @@ const Contact = () => {
     return Object.keys(errors).length === 0;
   };
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     
     // Rate limiting check
@@ -111,13 +112,27 @@ const Contact = () => {
 
     setIsSubmitting(true);
     
-    // Simulate form submission
-    setTimeout(() => {
+    try {
+      const { data, error } = await supabase.functions.invoke('send-contact-notification', {
+        body: {
+          firstName: formData.firstName,
+          lastName: formData.lastName,
+          email: formData.email,
+          phone: formData.phone,
+          company: formData.company,
+          service: formData.service,
+          budget: formData.budget,
+          message: formData.message,
+          timeline: formData.timeline,
+        }
+      });
+
+      if (error) throw error;
+
       toast({
         title: "Message Sent Successfully!",
-        description: "We'll get back to you within 24 hours.",
+        description: "We've received your message and will get back to you within 24 hours.",
       });
-      setIsSubmitting(false);
       
       // Reset form
       setFormData({
@@ -132,7 +147,16 @@ const Contact = () => {
         timeline: ''
       });
       setFormErrors({});
-    }, 1000);
+    } catch (error) {
+      console.error('Error submitting contact form:', error);
+      toast({
+        title: "Submission Failed",
+        description: "There was a problem sending your message. Please try again or contact us directly.",
+        variant: "destructive",
+      });
+    } finally {
+      setIsSubmitting(false);
+    }
   };
 
   return (

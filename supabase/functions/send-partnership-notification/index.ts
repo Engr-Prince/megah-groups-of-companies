@@ -1,7 +1,13 @@
 import { serve } from "https://deno.land/std@0.190.0/http/server.ts";
 import { Resend } from "npm:resend@2.0.0";
+import { createClient } from "https://esm.sh/@supabase/supabase-js@2";
 
 const resend = new Resend(Deno.env.get("RESEND_API_KEY"));
+
+const supabaseAdmin = createClient(
+  Deno.env.get('SUPABASE_URL') ?? '',
+  Deno.env.get('SUPABASE_SERVICE_ROLE_KEY') ?? ''
+);
 
 const corsHeaders = {
   "Access-Control-Allow-Origin": "*",
@@ -26,7 +32,28 @@ const handler = async (req: Request): Promise<Response> => {
   try {
     const { name, email, organization, supportType, message }: PartnershipNotification = await req.json();
 
-    console.log("Sending partnership notification for:", email);
+    console.log("Processing partnership inquiry for:", email);
+
+    // First, save to database
+    const { data: dbData, error: dbError } = await supabaseAdmin
+      .from('partnership_inquiries')
+      .insert([{
+        name,
+        email,
+        organization,
+        support_type: supportType,
+        message,
+        status: 'new'
+      }])
+      .select()
+      .single();
+
+    if (dbError) {
+      console.error("Database error:", dbError);
+      throw new Error(`Failed to save inquiry: ${dbError.message}`);
+    }
+
+    console.log("Inquiry saved to database:", dbData.id);
 
     // Send notification email to admin
     const adminEmailResponse = await resend.emails.send({

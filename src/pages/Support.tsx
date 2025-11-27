@@ -131,19 +131,23 @@ const Support = () => {
 
       if (dbError) throw dbError;
 
-      // Send notification email
-      const { error: emailError } = await supabase.functions.invoke('send-partnership-notification', {
-        body: {
-          name: validatedData.name,
-          email: validatedData.email,
-          organization: validatedData.organization,
-          supportType: validatedData.supportType,
-          message: validatedData.message,
-        }
-      });
+      // Send notification email (wrapped in try-catch to not fail submission)
+      try {
+        const { error: emailError } = await supabase.functions.invoke('send-partnership-notification', {
+          body: {
+            name: validatedData.name,
+            email: validatedData.email,
+            organization: validatedData.organization,
+            supportType: validatedData.supportType,
+            message: validatedData.message,
+          }
+        });
 
-      if (emailError) {
-        console.error('Email notification error:', emailError);
+        if (emailError) {
+          console.error('Email notification error:', emailError);
+        }
+      } catch (emailNetworkError) {
+        console.error('Email notification network error:', emailNetworkError);
         // Don't fail the whole submission if email fails
       }
 

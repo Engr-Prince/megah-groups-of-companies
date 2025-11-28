@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import Layout from "@/components/Layout";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
@@ -9,6 +9,7 @@ import { MapPin, Phone, Mail, Clock, Send, Facebook, Twitter, Instagram, Linkedi
 import { useToast } from "@/hooks/use-toast";
 import Map from "@/components/Map";
 import { useLanguage } from "@/contexts/LanguageContext";
+import { supabase } from "@/integrations/supabase/client";
 import { 
   sanitizeInput, 
   validateEmail, 
@@ -35,19 +36,6 @@ const Contact = () => {
   const [formErrors, setFormErrors] = useState<Record<string, string>>({});
   const [isSubmitting, setIsSubmitting] = useState(false);
   const rateLimiter = new RateLimiter();
-
-  // Handle success redirect from Web3Forms
-  useEffect(() => {
-    const params = new URLSearchParams(window.location.search);
-    if (params.get('success') === 'true') {
-      toast({
-        title: "Message Sent Successfully!",
-        description: "We've received your message and will get back to you within 24 hours.",
-      });
-      // Clean up URL
-      window.history.replaceState({}, '', '/contact');
-    }
-  }, [toast]);
 
   const handleInputChange = (field: string, value: string) => {
     const sanitizedValue = sanitizeInput(value);
@@ -94,10 +82,11 @@ const Contact = () => {
     return Object.keys(errors).length === 0;
   };
 
-  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    
     // Rate limiting check
     if (!rateLimiter.canAttempt('contact-form', 3, 60000)) {
-      e.preventDefault();
       toast({
         title: "Too many attempts",
         description: "Please wait before submitting again.",
@@ -107,7 +96,6 @@ const Contact = () => {
     }
 
     if (!validateForm()) {
-      e.preventDefault();
       // Scroll to first error
       const firstErrorField = Object.keys(formErrors)[0];
       const element = document.getElementById(firstErrorField);
@@ -124,13 +112,52 @@ const Contact = () => {
       return;
     }
 
-    // Show brief loading state - form will redirect to Web3Forms
     setIsSubmitting(true);
     
-    // Reset after 5 seconds if redirect doesn't happen (e.g., in preview iframe)
-    setTimeout(() => {
+    try {
+      const { data, error } = await supabase.functions.invoke('send-contact-notification', {
+        body: {
+          firstName: formData.firstName,
+          lastName: formData.lastName,
+          email: formData.email,
+          phone: formData.phone || null,
+          company: formData.company || null,
+          service: formData.service || null,
+          budget: formData.budget || null,
+          message: formData.message,
+          timeline: formData.timeline || null,
+        }
+      });
+      
+      if (error) throw error;
+      
+      toast({
+        title: "Message Sent Successfully!",
+        description: "We've received your message and will get back to you within 24 hours.",
+      });
+      
+      // Reset form
+      setFormData({
+        firstName: '',
+        lastName: '',
+        email: '',
+        phone: '',
+        company: '',
+        service: '',
+        budget: '',
+        message: '',
+        timeline: ''
+      });
+    } catch (error: any) {
+      console.error("Error submitting contact form:", error);
+      toast({
+        title: "Error sending message",
+        description: "Please try again or email us directly at megahgroupsofcompanies@gmail.com",
+        variant: "destructive",
+      });
+    } finally {
       setIsSubmitting(false);
-    }, 5000);
+    }
   };
 
   return (
@@ -163,22 +190,9 @@ const Contact = () => {
                 </CardHeader>
                 <CardContent>
                   <form 
-                    action="https://api.web3forms.com/submit" 
-                    method="POST"
                     onSubmit={handleSubmit}
                     className="space-y-6"
                   >
-                    {/* Web3Forms hidden fields */}
-                    <input type="hidden" name="access_key" value="bc39fe5b-e02c-4b05-9b5d-dde9be7c3b39" />
-                    <input type="hidden" name="to_email" value="megahgroupsofcompanies@gmail.com" />
-                    <input type="hidden" name="cc" value="megahprince82@gmail.com" />
-                    <input type="hidden" name="subject" value="New Contact Form Submission - MEGAH" />
-                    <input type="hidden" name="from_name" value="MEGAH Contact Form" />
-                    <input type="hidden" name="redirect" value={`${window.location.origin}/contact?success=true`} />
-                    <input type="checkbox" name="botcheck" className="hidden" style={{ display: 'none' }} />
-                    
-                    {/* Hidden field to combine first + last name for Web3Forms */}
-                    <input type="hidden" name="name" value={`${formData.firstName} ${formData.lastName}`} />
 
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                       <div>

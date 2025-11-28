@@ -37,7 +37,7 @@ const Navbar = () => {
           <Link to="/" className="flex items-center">
             <img 
               src={megahLogo} 
-              alt="megahgroupsofcompanies" 
+              alt="Megah Groups of Companies" 
               className="h-12 w-auto"
             />
           </Link>

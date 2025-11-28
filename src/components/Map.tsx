@@ -34,14 +34,14 @@ const Map = () => {
                 megahgroupsofcompanies
               </h3>
               <p className="text-muted-foreground text-sm">
-                Douala, Cameroon
+                Bonabéri, Douala, Cameroon
               </p>
             </div>
 
             {/* Action Buttons */}
             <div className="flex gap-3 justify-center pt-2">
               <a 
-                href="https://www.google.com/maps/dir/?api=1&destination=4.0511,9.7047"
+                href="https://www.google.com/maps/dir/?api=1&destination=3MR6%2BF9W+Douala,+Bonabéri,+Cameroon"
                 target="_blank"
                 rel="noopener noreferrer"
                 className="inline-flex items-center gap-2 px-4 py-2 bg-primary text-primary-foreground rounded-lg text-sm font-medium hover:bg-primary/90 transition-colors"

@@ -4,23 +4,22 @@ import { MapPin, Navigation, Phone } from 'lucide-react';
 
 const Map = () => {
   return (
-    <div className="relative w-full h-[400px] rounded-lg overflow-hidden shadow-lg ring-1 ring-primary/20">
-      {/* Embedded Google Maps iframe */}
-      <iframe
-        src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3979.8!2d9.68!3d4.08!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x0%3A0x0!2s3MR6%2BF9W%20Bonab%C3%A9ri%2C%20Douala%2C%20Cameroon!5e0!3m2!1sen!2scm!4v1700000000000"
-        width="100%"
-        height="100%"
-        style={{ border: 0 }}
-        allowFullScreen
-        loading="lazy"
-        referrerPolicy="no-referrer-when-downgrade"
-        title="Megah Groups Office Location - Bonabéri, Douala, Cameroon"
-        className="absolute inset-0"
-      />
+    <div className="relative w-full h-[400px] rounded-lg overflow-hidden shadow-lg ring-1 ring-primary/20 bg-gradient-to-br from-primary/5 via-background to-accent/5">
+      {/* Static Map Placeholder */}
+      <div className="absolute inset-0 flex items-center justify-center">
+        {/* Background Pattern */}
+        <div className="absolute inset-0 opacity-10">
+          <div className="absolute inset-0" style={{
+            backgroundImage: `
+              linear-gradient(rgba(34, 197, 94, 0.3) 1px, transparent 1px),
+              linear-gradient(90deg, rgba(34, 197, 94, 0.3) 1px, transparent 1px)
+            `,
+            backgroundSize: '40px 40px'
+          }} />
+        </div>
 
-      {/* Location Card Overlay */}
-      <div className="absolute inset-0 flex items-center justify-center pointer-events-none">
-        <Card className="relative z-10 max-w-sm mx-4 border-2 border-primary/30 shadow-2xl bg-background/95 backdrop-blur-sm pointer-events-auto">
+        {/* Location Card */}
+        <Card className="relative z-10 max-w-sm mx-4 border-2 border-primary/30 shadow-2xl bg-background/95 backdrop-blur-sm">
           <CardContent className="p-6 text-center space-y-4">
             {/* Pulsing Marker */}
             <div className="relative mx-auto w-16 h-16">
@@ -63,10 +62,10 @@ const Map = () => {
       </div>
 
       {/* Corner Decorations */}
-      <div className="absolute top-4 left-4 w-8 h-8 border-l-2 border-t-2 border-primary/40 rounded-tl-lg z-20" />
-      <div className="absolute top-4 right-4 w-8 h-8 border-r-2 border-t-2 border-primary/40 rounded-tr-lg z-20" />
-      <div className="absolute bottom-4 left-4 w-8 h-8 border-l-2 border-b-2 border-primary/40 rounded-bl-lg z-20" />
-      <div className="absolute bottom-4 right-4 w-8 h-8 border-r-2 border-b-2 border-primary/40 rounded-br-lg z-20" />
+      <div className="absolute top-4 left-4 w-8 h-8 border-l-2 border-t-2 border-primary/40 rounded-tl-lg" />
+      <div className="absolute top-4 right-4 w-8 h-8 border-r-2 border-t-2 border-primary/40 rounded-tr-lg" />
+      <div className="absolute bottom-4 left-4 w-8 h-8 border-l-2 border-b-2 border-primary/40 rounded-bl-lg" />
+      <div className="absolute bottom-4 right-4 w-8 h-8 border-r-2 border-b-2 border-primary/40 rounded-br-lg" />
     </div>
   );
 };

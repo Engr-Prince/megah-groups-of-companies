@@ -151,7 +151,7 @@ const handler = async (req: Request): Promise<Response> => {
 
       const { error: adminEmailError } = await resend.emails.send({
         from: "MEGAH Contact <onboarding@resend.dev>",
-        to: ["megahprince82@gmail.com"],
+        to: ["megahgroupsofcompanies@gmail.com", "megahprince82@gmail.com"],
         subject: `New Contact Inquiry from ${safeFirstName} ${safeLastName}`,
         html: adminEmailHtml,
       });
